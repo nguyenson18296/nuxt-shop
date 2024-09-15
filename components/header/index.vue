@@ -1,0 +1,87 @@
+<script setup lang="ts">
+import { PhList, PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser } from "@phosphor-icons/vue";
+</script>
+
+<template>
+  <header>
+    <div class="header-center bg-[#443e40] px-0 py-[15px] w-full">
+      <div class="container !flex items-center">
+        <div class="header-logo text-center mt-[22px] mb-[19px] mx-0 lg:p-0">
+          <img src="/img/flex-cart.webp" alt="flex-cart"/>
+        </div>
+        <div class="search-bar w-[40%] px-[15px] py-0">
+          <div class="w-full relative">
+            <input class="w-full px-4 text-sm h-[50px] text-[#666] rounded-lg border-[none] bg-white" />
+            <div class="search-icon absolute top-0 right-0 bottom-0 flex items-center justify-center">
+              <button class="flex items-center gap-2 bg-[#443e40] text-white tracking-[1px] h-11 normal-case float-left w-auto relative transition-[0.5s] duration-[ease-in-out] mx-[5px] my-[3px] px-5 py-3.5 rounded-lg border-[none]">
+                <span>
+                  Search
+                </span>
+                <PhMagnifyingGlass :size="24" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white flex items-center gap-2">
+          <PhPhone />
+          <div>
+            +(00)1234 567891
+          </div>
+        </div>
+        <div class="ml-4 nav-user flex items-center gap-4">
+          <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+          <PhUser :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+          <PhShoppingCart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+        </div>
+      </div>
+    </div>
+    <div class="header-bottom bg-[#f27002] text-center float-left w-full px-0 py-2">
+      <div class="container">
+        <div class="tt-header-content bg-[#443e40] rounded-lg float-left h-[54px] px-2.5 py-[15px] w-[250px] flex items-center">
+          <nav class="w-full text-center mx-auto my-0 p-0">
+            <div class="flex items-center gap-2 text-white cursor-pointer float-left relative text-left uppercase w-full rounded-lg">
+              <PhList :size="32" />
+              <span class="">
+                shop by categories
+              </span>
+            </div>
+          </nav>
+        </div>
+        <div class="flex items-center">
+          <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              About Us
+            </a>
+          </div>
+          <div class="flex items-center group mt-1.5 mb-0 mx-2">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              Affiliate
+            </a>
+          </div>
+          <div class="flex items-center group mt-1.5 mb-0 mx-2">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              Contact Us
+            </a>
+          </div>
+          <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              Return Policy
+            </a>
+          </div>
+          <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              Terms & Conditions
+            </a>
+          </div>
+          <div class="cursor-pointer group mt-1.5 mb-0 mx-2 flex items-center">
+            <a class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+              More
+            </a>
+            <PhCaretDown color="#fff"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</template>
+
