@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+.container {
+  @apply mx-auto;
+  width: 1430px;
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+}
+
+@media (min-width: 1260px) and (max-width: 1499px) {
+  .container {
+      width: 1230px;
+  }
+}
