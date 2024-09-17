@@ -30,5 +30,11 @@ export default defineNuxtConfig({
     families: {
       "Open Sans": [400, 700],
     }
+  },
+
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.BASE_URL || 'http://localhost:1996',
+    }
   }
 })
