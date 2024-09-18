@@ -16,5 +16,20 @@ const appConfig = useAppConfig();
     <section>
       <ShopCategories />
     </section>
+    <section>
+      <SubBanners />
+      <FeatureProducts />
+    </section>
+    <section>
+      <BestSellerProducts />
+    </section>
+    <section>
+      <SubBannersNewProducts />
+      <NewProducts />
+    </section>
+    <section>
+      <NewPosts />
+    </section>
+    <Footer />
   </div>
 </template>
