@@ -16,7 +16,7 @@ definePageMeta({
   layout: "landing-page-section"
 })
 
-const { data } = await useFetchBaseUrl<IProduct>('/api/products/newest');
+const { data } = await useFetchBaseUrl<IProduct[]>('/api/products/newest');
 
 const products = data.value?.data || [];
 console.log('products', products)

@@ -23,7 +23,7 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
           <p class="brand text-[#999] text-sm mb-[0.21429rem] m-0">
             Premium Quality
           </p>
-          <h4 class="card-title text-sm text-ellipsis overflow-hidden font-semibold">
+          <h4 class="card-title text-sm text-ellipsis h-[60px] whitespace-pre-wrap overflow-hidden font-semibold">
             <a class="text-[#443e40] hover:text-[#fbb03b]" href="/product/satin-crossover-top">
               {{ title }}
             </a>

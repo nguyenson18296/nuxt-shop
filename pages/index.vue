@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import OfferBanners from '@/components/landing-page/offer-banners/index.vue';
-
 const appConfig = useAppConfig();
+
 </script>
 
 <template>
-  <div>
-    <Header />
+  <NuxtLayout name="page-wrapper">
     <section>
       <Hero />
     </section>
@@ -30,6 +28,5 @@ const appConfig = useAppConfig();
     <section>
       <NewPosts />
     </section>
-    <Footer />
-  </div>
+  </NuxtLayout>
 </template>

@@ -24,10 +24,10 @@ const products = data.value?.data || [];
 <template>
   <NuxtLayout
     name="landing-page-section"
-    section-title="Featured Products"
+    section-title="Related Products"
     bg-section="#fff"
     bg-text="#fff"
-    number-of-slides="5"
+    number-of-slides="6"
   >
     <swiper-slide v-for="product in products" :key="product.id">
       <ProductFeature :img-src="product.thumbnail" :second-img-src="product.images?.[0] ?? ''" :title="product.title" :slug="product.slug" :product-in-stock="product.in_stock" :price="product.price" :discount-price="product.discount_price" />
