@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SwiperSlide } from 'swiper/vue';
+const config = useRuntimeConfig()
 
 interface IProduct {
   id: number;
@@ -16,7 +17,12 @@ definePageMeta({
   layout: "landing-page-section"
 })
 
-const { data } = await useFetchBaseUrl<IProduct[]>('/api/products/random?limit=10');
+const { data } = await useFetch<{
+  data: IProduct[];
+}>('/products/random?limit=10', {
+  baseURL: 'http://localhost:1996/api',
+  method: 'GET'
+})
 
 const products = data.value?.data || [];
 </script>

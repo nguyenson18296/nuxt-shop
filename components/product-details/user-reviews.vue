@@ -11,7 +11,6 @@ const slug = route.params.slug[0];
 
 const data = await useFetchBaseUrl<{ data: IReview[] }>(`/api/product-reviews/${slug}`);
 const reviews = data.data.value ?? [] as IReview[];
-console.log('reviews', reviews);
 </script>
 
 <template>

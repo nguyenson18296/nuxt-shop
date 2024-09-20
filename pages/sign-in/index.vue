@@ -1,0 +1,22 @@
+<script setup lang="ts">
+import { storeToRefs } from 'pinia';
+
+const router = useRouter();
+
+const { authenticated } = storeToRefs(useAuthStore());
+
+watch(authenticated, (newValue, oldValue) => {
+  if (newValue) {
+    console.log('authenticated signin', newValue);
+    router.push('/');
+  }
+}, { immediate: false });
+
+</script>
+
+<template>
+  <NuxtLayout name="page-wrapper">
+    <Breadcrumbs />
+    <LoginForm />
+  </NuxtLayout>
+</template>

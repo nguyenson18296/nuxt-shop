@@ -19,7 +19,6 @@ definePageMeta({
 const { data } = await useFetchBaseUrl<IProduct[]>('/api/products/newest');
 
 const products = data.value?.data || [];
-console.log('products', products)
 </script>
 
 <template>
