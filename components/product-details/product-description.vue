@@ -18,6 +18,7 @@ const onChangeTab = (index: number) => {
 <template>
   <article
     class="product-description border border-neutral-200 w-full mt-[30px] mb-[45px] mx-0 px-[25px] py-[15px] rounded-lg border-solid">
+    <Dropdown />
     <ul class="tabs flex items-center gap-2">
       <li
         class="tab cursor-pointer text-[#777] font-semibold text-base leading-5 tracking-[1px] capitalize z-[1] mt-0 mb-px mx-0 pt-2.5 pb-3 px-0"

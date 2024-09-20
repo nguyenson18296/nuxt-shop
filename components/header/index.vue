@@ -1,5 +1,29 @@
 <script setup lang="ts">
-import { PhList, PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser } from "@phosphor-icons/vue";
+import { PhList, PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
+
+const { user, authenticated } = storeToRefs(useAuthStore());
+const { setUser } = useAuthStore();
+const token = useCookie('token')
+
+const getMe = async () => {
+  const { data } = useFetch<{
+    success: boolean;
+    data: UserInterface;
+  }>('http://localhost:1996/api/auth/me', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    }
+  })
+  if (data.value?.success) {
+    setUser(data.value.data)
+  }
+}
+
+getMe();
+
+console.log('authenticated', authenticated.value)
+
 </script>
 
 <template>
@@ -32,7 +56,54 @@ import { PhList, PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCar
         </div>
         <div class="ml-4 nav-user flex items-center gap-4">
           <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
-          <PhUser :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+          <Dropdown>
+            <template #trigger>
+              <div class="flex items-center gap-2">
+                <PhUser :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+                <span v-if="authenticated" class="text-white">
+                  Hi, {{ user.username }}
+                </span>
+              </div>
+            </template>
+            <template #dropdown-content>
+              <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                <div v-if="authenticated">
+                  <li>
+                    <a href="/account"
+                      class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <PhUserCheck size="24" />
+                      <span>
+                        My Account
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/register"
+                      class="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <PhSignOut size="24" />
+                      <span>
+                        Logout
+                      </span>
+                    </a>
+                  </li>
+                </div>
+                <div v-else>
+                  <li>
+                    <a href="/sign-in"
+                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      Sign in
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/register"
+                      class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      Register
+                    </a>
+                  </li>
+                </div>
+              </ul>
+            </template>
+          </Dropdown>
           <PhShoppingCart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
         </div>
       </div>
