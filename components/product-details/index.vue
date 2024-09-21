@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhStar, PhPen, PhCaretCircleDown, PhCaretCircleUp, PhCaretDown } from "@phosphor-icons/vue";
+import { PhStar, PhPen, PhCaretCircleDown, PhCaretCircleUp, PhCaretDown, PhFacebookLogo, PhEnvelope, PhPrinter, PhTwitterLogo, PhLinkedinLogo, PhPinterestLogo } from "@phosphor-icons/vue";
 
 defineProps({
   id: {
@@ -150,6 +150,26 @@ const decrement = () => {
               </span>
             </button>
           </div>
+          <ul class="flex mt-4 gap-[5px] items-center">
+            <li class="w-10 cursor-pointer h-10 flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhFacebookLogo :size="32" />
+            </li>
+            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhEnvelope :size="32" />
+            </li>
+            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhPrinter :size="32" />
+            </li>
+            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhTwitterLogo :size="32" />
+            </li>
+            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhLinkedinLogo :size="32" />
+            </li>
+            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+              <PhPinterestLogo :size="32" />
+            </li>
+          </ul>
         </div>
       </div>
     </div>

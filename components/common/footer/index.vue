@@ -10,6 +10,34 @@ const categories = categoriesStore.categories;
 
 <template>
   <footer>
+    <div class="subscription w-full bg-[#f27002]">
+      <div class="container py-[18px]">
+        <article class="full-subscription flex items-center gap-12">
+          <div class="flex-[0_0_50%] text-white flex items-center gap-4">
+            <h5 class="footer-heading text-xl flex items-center gap-2">
+              <PhEnvelope :size="32" />
+              <span>
+                Sign Up For Newsletter
+              </span>
+            </h5>
+            <p>
+              ...and receive $20 coupon on next shopping
+            </p>
+          </div>
+          <div class="relative w-full flex flex-wrap">
+            <input
+              class="text-sm w-full pl-5 h-12 pr-[147px] py-0 rounded-[25px]"
+              placeholder="Enter your email address"
+            />
+            <input
+              type="submit"
+              value="Subscribe"
+              class="w-auto absolute text-sm h-12 px-8 text-white border-[#443e40] -right-0.5 bg-[#443e40] rounded-[25px] cursor-pointer hover:bg-[#191919]"
+            />
+          </div>
+        </article>
+      </div>
+    </div>
     <div class="footer-link bg-[#191919] pt-10 pb-2.5">
       <div class="container">
         <section class="footer-info flex items-start">
