@@ -27,7 +27,7 @@ const onImageChange = (image: string) => {
         :style="{ borderColor: image === mainImage ? '#777' : '#f3f4f6' }"
         @click="onImageChange(image)"
       >
-        <img :src="image" alt="Product image" class="h-[120px] w-[95px]">
+        <NuxtImg :src="image" alt="Product image" class="h-[120px] w-[95px]" />
       </li>
     </ul>
   </div>

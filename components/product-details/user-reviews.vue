@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import { PhChat } from '@phosphor-icons/vue';
+
 interface IReview {
   id: number;
   content: string;
@@ -7,7 +9,7 @@ interface IReview {
   created_at: string;
   user: {
     id: number;
-    name: string;
+    username: string;
     email: string;
     avatar: string;
   }
@@ -29,8 +31,6 @@ const { data } = await useFetch<{ data: IReview[] }>(`/api/product-reviews/${slu
 
 const reviews = data.value?.data ?? [] as IReview[];
 
-console.log('reviews', reviews)
-
 const createComment = async () => {
   try {
     const formData = {
@@ -45,8 +45,9 @@ const createComment = async () => {
       onResponse: async ({ response }) => {
         if (response.ok) {
           const data = response._data.data
-          reviews.push(data)
-          comment.value = ''
+          reviews.push(data);
+          comment.value = '';
+          selectedRepliedId.value = 0;
         }
       },
       onResponseError: (error) => {
@@ -76,7 +77,8 @@ const createReplyComment = async (replyId: number) => {
         if (parentComment) {
           parentComment.replies.push(data)
         }
-        comment.value = ''
+        comment.value = '';
+        selectedRepliedId.value = 0;
       }
     },
     onResponseError: (error) => {
@@ -96,21 +98,24 @@ const onToggleReply = (replyId: number) => {
 
 <template>
   <div class="user-ratings">
-    <div v-for="review in reviews" :key="review.id" class="product-ratings flex items-start">
+    <div v-for="review in reviews" :key="review.id" class="product-ratings hover:bg-[#fbfbfb] flex items-start">
       <a class="avatar text-center w-10 mr-2.5">
         <div class="user-avatar h-10 w-10 border-0">
-          <img v-if="review.user.avatar" :src="review.user.avatar" :alt="review.user.name" />
-          <img v-else src="/img/avatar-placeholder.svg" :alt="review.user.name" />
+          <img v-if="review.user.avatar" :src="review.user.avatar" :alt="review.user.username" />
+          <img v-else src="/img/avatar-placeholder.svg" :alt="review.user.username" />
         </div>
       </a>
-      <div class="main-rating flex-1">
-        <a class="author-name text-[rgba(0,0,0,0.87)] text-xs no-underline">
-          {{ review.user.name }}
+      <div class="main-rating flex-1 mb-2">
+        <a class="author-name font-bold text-[rgba(0,0,0,0.87)] text-xs no-underline">
+          {{ review.user.username }}
         </a>
-        <div>
+        <div class="mb-4">
           <p
-            class="content relative box-border text-sm leading-5 text-[rgba(0,0,0,0.87)] whitespace-pre-wrap mx-0 my-2">
+            class="content relative box-border text-sm leading-5 text-[rgba(0,0,0,0.87)] whitespace-pre-wrap mx-0 mt-1">
             {{ review.content }}
+          </p>
+          <p class="text-sm">
+            {{ dayjs(review.created_at).format('MMMM DD, YYYY, hh:mm') }}
           </p>
           <div class="flex items-center max-h-2xl shrink overflow-hidden mb-2">
             <button @click="() => onToggleReply(review.id)"
@@ -141,17 +146,20 @@ const onToggleReply = (replyId: number) => {
         <div v-for="reply in review.replies" :key="reply.id" class="product-ratings flex items-start">
           <a class="avatar text-center w-10 mr-2.5">
             <div class="user-avatar h-10 w-10 border-0">
-              <img v-if="reply.user.avatar" :src="reply.user.avatar" :alt="reply.user.name" />
-              <img v-else src="/img/avatar-placeholder.svg" :alt="reply.user.name" />
+              <img v-if="reply.user.avatar" :src="reply.user.avatar" :alt="reply.user.username" />
+              <img v-else src="/img/avatar-placeholder.svg" :alt="reply.user.username" />
             </div>
           </a>
           <div class="main-rating flex-1">
-            <a class="author-name text-[rgba(0,0,0,0.87)] text-xs no-underline">
-              {{ reply.user.name }}
+            <a class="author-name font-bold text-[rgba(0,0,0,0.87)] text-xs no-underline">
+              {{ reply.user.username }}
             </a>
-            <div class="mx-0 my-2">
+            <div class="mx-0 mt-1 mb-2">
               <p class="content relative box-border text-sm leading-5 text-[rgba(0,0,0,0.87)] whitespace-pre-wrap">
                 {{ reply.content }}
+              </p>
+              <p class="text-sm">
+                {{ dayjs(reply.created_at).format('MMMM DD, YYYY, hh:mm') }}
               </p>
             </div>
           </div>

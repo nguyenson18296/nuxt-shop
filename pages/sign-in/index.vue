@@ -7,7 +7,6 @@ const { authenticated } = storeToRefs(useAuthStore());
 
 watch(authenticated, (newValue, oldValue) => {
   if (newValue) {
-    console.log('authenticated signin', newValue);
     router.push('/');
   }
 }, { immediate: false });

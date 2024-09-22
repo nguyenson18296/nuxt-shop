@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     }
   ],
 
-  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt'],
+  modules: ['@nuxtjs/google-fonts', '@pinia/nuxt', '@nuxt/image'],
   googleFonts: {
     families: {
       "Open Sans": [400, 700],

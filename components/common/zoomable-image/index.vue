@@ -36,7 +36,7 @@ const resetZoom = () => {
 
 <template>
   <div class="zoom-container">
-    <img
+    <NuxtImg
       :src="src"
       :alt="alt"
       :style="imgStyles"
