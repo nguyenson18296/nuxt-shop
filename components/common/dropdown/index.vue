@@ -1,4 +1,11 @@
 <script setup lang="ts">
+const props = defineProps({
+  dropdownButtonId: {
+    type: String,
+    required: true,
+  },
+})
+
 const isOpenDropdown = ref(false);
 
 const toggleDropdown = () => {
@@ -6,7 +13,7 @@ const toggleDropdown = () => {
 };
 
 const closeDropdown = (event: MouseEvent) => {
-  if (!(event.target as HTMLElement).closest('#dropdownDefaultButton')) {
+  if (!(event.target as HTMLElement).closest(`#${props.dropdownButtonId}`)) {
     isOpenDropdown.value = false;
   }
 };
@@ -15,7 +22,7 @@ const closeDropdown = (event: MouseEvent) => {
 <template>
   <div class="relative">
     <button
-      id="dropdownDefaultButton"
+      :id="dropdownButtonId"
       data-dropdown-toggle="dropdown"
       @click="toggleDropdown"
     >
@@ -25,7 +32,7 @@ const closeDropdown = (event: MouseEvent) => {
         v-on-click-outside="closeDropdown"
         v-if="isOpenDropdown"
         id="dropdown" 
-        class="absolute top-10 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+        class="absolute top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
         <slot name="dropdown-content" />
     </div>
   </div>

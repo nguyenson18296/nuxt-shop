@@ -24,20 +24,23 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
             Premium Quality
           </p>
           <h4 class="card-title text-sm text-ellipsis h-[60px] whitespace-pre-wrap overflow-hidden font-semibold">
-            <a class="text-[#443e40] hover:text-[#fbb03b]" href="/product/satin-crossover-top">
+            <NuxtLink
+              class="text-[#443e40] hover:text-[#fbb03b]"
+              :href="`/product/${slug}`"
+            >
               {{ title }}
-            </a>
+            </NuxtLink>
           </h4>
         </div>
         <!-- <a> -->
         <div class="card-img-container relative max-w-full w-full">
-          <img
+          <NuxtImg
             :src="imgSrc"
             :alt="title"
             class="min-h-[190px] max-h-[270px] image-1 w-full max-h-full object-contain m-auto"
             :class="{ hoverable: secondImgSrc }"
           />
-          <img
+          <NuxtImg
             v-if="secondImgSrc"
             :src="secondImgSrc"
             :alt="title"

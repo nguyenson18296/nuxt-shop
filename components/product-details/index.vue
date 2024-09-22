@@ -24,11 +24,17 @@ defineProps({
     required: true,
   },
   price: {
-    type: String,
+    type: Number,
     required: true,
   },
-  discount_price: String,
+  in_stock: {
+    type: Number,
+    required: true,
+  },
+  discount_price: Number,
 })
+
+const emit = defineEmits(['addToCart']);
 
 const quantity = ref(1);
 
@@ -40,6 +46,10 @@ const decrement = () => {
   if (quantity.value > 1) {
     quantity.value -= 1;
   }
+}
+
+const addToCart = () => {
+  emit('addToCart', quantity.value);
 }
 
 </script>
@@ -58,9 +68,7 @@ const decrement = () => {
         <h2 class="brand font-normal text-sm leading-5 mb-4">
           OFS
         </h2>
-        <div class="product-price text-xl font-semibold leading-[18px]">
-          {{ price }}
-        </div>
+        <ProductPrice class-names="justify-start" :price="price" :discount_price="discount_price" />
         <div
           class="product-rating flex items-center w-full border-b-neutral-200 mt-2.5 mb-[15px] mx-0 pt-0 pb-[15px] px-0 border-b border-solid">
           <div class="flex items-center gap-1">
@@ -115,10 +123,10 @@ const decrement = () => {
         <div class="product-options flex flex-col gap-2">
           <div class="flex items-center text-[#222] font-bold mb-[5px]">
             <label>
-              Current Stock:
+              Current Stock:&nbsp;
             </label>
             <span>
-              12
+              {{ in_stock }} items
             </span>
           </div>
           <div class="flex items-center text-[#222] font-bold mb-[5px]">
@@ -131,19 +139,23 @@ const decrement = () => {
               <button @click="decrement">
                 <PhCaretCircleDown size="20" />
               </button>
-              <input type="number" v-model="quantity"class="text-sm font-bold h-auto text-center w-10 p-0 border-0" />
+              <input type="number" v-model="quantity" class="text-sm font-bold h-auto text-center w-10 p-0 border-0" />
               <button @click="increment">
                 <PhCaretCircleUp size="20" />
               </button>
             </div>
             <div>
-              <button class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem]">
+              <button
+                class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem]"
+                @click="addToCart"
+              >
                 Add to Cart
               </button>
             </div>
           </div>
           <div class="mt-4">
-            <button class="border border-neutral-200 text-[#666] font-semibold flex items-center rounded-lg px-[2.28571rem] py-[0.85714rem]">
+            <button
+              class="border border-neutral-200 text-[#666] font-semibold flex items-center rounded-lg px-[2.28571rem] py-[0.85714rem]">
               Add to Wishlist
               <span class="ml-1">
                 <PhCaretDown size="20" />
@@ -151,22 +163,28 @@ const decrement = () => {
             </button>
           </div>
           <ul class="flex mt-4 gap-[5px] items-center">
-            <li class="w-10 cursor-pointer h-10 flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 cursor-pointer h-10 flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhFacebookLogo :size="32" />
             </li>
-            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhEnvelope :size="32" />
             </li>
-            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhPrinter :size="32" />
             </li>
-            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhTwitterLogo :size="32" />
             </li>
-            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhLinkedinLogo :size="32" />
             </li>
-            <li class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
+            <li
+              class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-[50%] bg-[#f5f5f5] hover:bg-[#dcdcdc]">
               <PhPinterestLogo :size="32" />
             </li>
           </ul>

@@ -21,9 +21,6 @@ const getMe = async () => {
 }
 
 getMe();
-
-console.log('authenticated', authenticated.value)
-
 </script>
 
 <template>
@@ -56,7 +53,9 @@ console.log('authenticated', authenticated.value)
         </div>
         <div class="ml-4 nav-user flex items-center gap-4">
           <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
-          <Dropdown>
+          <Dropdown
+            dropdownButtonId="user-dropdown"
+          >
             <template #trigger>
               <div class="flex items-center gap-2">
                 <PhUser :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
@@ -104,7 +103,7 @@ console.log('authenticated', authenticated.value)
               </ul>
             </template>
           </Dropdown>
-          <PhShoppingCart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+          <CartIcon />
         </div>
       </div>
     </div>
