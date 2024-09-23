@@ -27,7 +27,7 @@ console.log('postDetail', postDetail);
 
 <template>
   <NuxtLayout name="page-wrapper">
-    <Breadcrumbs />
+    <Breadcrumbs :title="postDetail.title"/>
     <div class="my-4 mx-8">
       <img :src="postDetail.cover_photo" :alt="postDetail.title" />
     </div>

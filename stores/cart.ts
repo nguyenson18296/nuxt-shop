@@ -33,7 +33,6 @@ export const useCartStore = defineStore('cart', {
     addProductToCart(product: IProductItem, quantity: number) {
       const cartItem = this.cart.find((item: ICartItem) => item.product.id === product.id);
 
-
       if (cartItem) {
         cartItem.quantity += quantity;
       } else {
@@ -44,8 +43,8 @@ export const useCartStore = defineStore('cart', {
         });
       }
     },
-    removeProductFromCart(product_id: number) {
-      this.cart = this.cart.filter((item: ICartItem) => item.product.id !== product_id);
+    removeProductFromCart(id: number) {
+      this.cart = this.cart.filter((item: ICartItem) => item.id !== id);
     },
   },
   getters: {

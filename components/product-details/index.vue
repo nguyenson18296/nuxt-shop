@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhStar, PhPen, PhCaretCircleDown, PhCaretCircleUp, PhCaretDown, PhFacebookLogo, PhEnvelope, PhPrinter, PhTwitterLogo, PhLinkedinLogo, PhPinterestLogo } from "@phosphor-icons/vue";
+import { PhStar, PhPen, PhCaretDown, PhFacebookLogo, PhEnvelope, PhPrinter, PhTwitterLogo, PhLinkedinLogo, PhPinterestLogo } from "@phosphor-icons/vue";
 
 defineProps({
   id: {
@@ -38,15 +38,9 @@ const emit = defineEmits(['addToCart']);
 
 const quantity = ref(1);
 
-const increment = () => {
-  quantity.value += 1;
-}
-
-const decrement = () => {
-  if (quantity.value > 1) {
-    quantity.value -= 1;
-  }
-}
+const updateQuantity = (newQuantity: number) => {
+  quantity.value = newQuantity;
+};
 
 const addToCart = () => {
   emit('addToCart', quantity.value);
@@ -135,7 +129,7 @@ const addToCart = () => {
             </label>
           </div>
           <div class="flex items-center text-[#222]">
-            <div class="flex items-center gap-1">
+            <!-- <div class="flex items-center gap-1">
               <button @click="decrement">
                 <PhCaretCircleDown size="20" />
               </button>
@@ -143,7 +137,11 @@ const addToCart = () => {
               <button @click="increment">
                 <PhCaretCircleUp size="20" />
               </button>
-            </div>
+            </div> -->
+            <QuantityInput
+              :quantity="quantity"
+              @update:quantity="updateQuantity"
+            />
             <div>
               <button
                 class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem]"
@@ -197,12 +195,6 @@ const addToCart = () => {
 </template>
 
 <style scoped>
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 .btn-primary {
   transition: all .15s ease;
 }
