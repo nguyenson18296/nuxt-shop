@@ -41,7 +41,7 @@ const addToCart = async (quantity: number) => {
 
 <template>
   <NuxtLayout name="page-wrapper">
-    <Breadcrumbs />
+    <Breadcrumbs :title="product.title" />
     <div class="container">
       <ProductDetails :id="product?.id" :title="product.title" :slug="product.slug" :thumbnail="product.thumbnail"
         :description="product.description" :price="product.price" :discount_price="product.discount_price" :images="product.images"

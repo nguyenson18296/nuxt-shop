@@ -8,7 +8,7 @@ defineProps({
     default: 'justify-center',
   },
   price: {
-    type: Number,
+  type: Number,
     required: true,
   },
   discount_price: {

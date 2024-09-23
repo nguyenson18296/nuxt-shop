@@ -9,7 +9,9 @@ const textClassNames = computed(() => {
 <template>
   <div
     class="section-heading relative mb-[30px] text-[#222] font-bold text-[22px] leading-[34px] relative capitalize w-full tracking-[0.8px] text-left z-[1] m-0 px-0 py-1.5">
-    <span :class="textClassNames">
+    <span :class="textClassNames"
+    :style="{ background: bgText }"
+    >
       {{ title }}
     </span>
   </div>

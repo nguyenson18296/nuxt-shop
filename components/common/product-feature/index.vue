@@ -26,7 +26,7 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
           <h4 class="card-title text-sm text-ellipsis h-[60px] whitespace-pre-wrap overflow-hidden font-semibold">
             <NuxtLink
               class="text-[#443e40] hover:text-[#fbb03b]"
-              :href="`/product/${slug}`"
+              :href="`/products/${slug}`"
             >
               {{ title }}
             </NuxtLink>
