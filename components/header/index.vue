@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhList, PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
+import { PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
 
 const { user, authenticated } = storeToRefs(useAuthStore());
 const { setUser } = useAuthStore();
@@ -110,18 +110,7 @@ getMe();
     <div class="header-bottom bg-[#f27002] text-center w-full px-0 py-2">
       <div class="container">
         <div class="flex items-center">
-          <div
-            class="tt-header-content bg-[#443e40] rounded-lg float-left h-[54px] px-2.5 py-[15px] w-[250px] flex items-center">
-            <nav class="w-full text-center mx-auto my-0 p-0">
-              <div
-                class="flex items-center gap-2 text-white cursor-pointer float-left relative text-left uppercase w-full rounded-lg">
-                <PhList :size="32" />
-                <span class="">
-                  shop by categories
-                </span>
-              </div>
-            </nav>
-          </div>
+          <ShopByCategoryDropdown />
           <div class="flex items-center">
             <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
               <a

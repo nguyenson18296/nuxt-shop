@@ -15,7 +15,7 @@ watch(authenticated, (newValue, oldValue) => {
 
 <template>
   <NuxtLayout name="page-wrapper">
-    <Breadcrumbs />
+    <Breadcrumbs title="Sign In"/>
     <LoginForm />
   </NuxtLayout>
 </template>

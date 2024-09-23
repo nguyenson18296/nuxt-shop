@@ -4,6 +4,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  contentClassNames: {
+    type: String,
+    default: '',
+  },
 })
 
 const isOpenDropdown = ref(false);
@@ -32,7 +36,9 @@ const closeDropdown = (event: MouseEvent) => {
         v-on-click-outside="closeDropdown"
         v-if="isOpenDropdown"
         id="dropdown" 
-        class="absolute top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+        class="absolute top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+        :class="contentClassNames"
+      >
         <slot name="dropdown-content" />
     </div>
   </div>
