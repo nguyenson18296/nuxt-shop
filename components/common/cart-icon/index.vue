@@ -8,7 +8,7 @@ const { cart } = storeToRefs(store);
 
 store.fetchCart();
 
-const cartLength = computed(() => cart.value.length);
+const cartLength = computed(() => cart.value?.length ?? 0);
 </script>
 
 <template>

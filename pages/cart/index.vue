@@ -1,18 +1,82 @@
 <script setup lang="ts">
 import { PhTrash } from '@phosphor-icons/vue';
 import { storeToRefs } from 'pinia';
-
-const cartStore = useCartStore();
-const { cartTotal, cartTotalDiscount, removeProductFromCart } = useCartStore();
+import { useForm, Form, Field, ErrorMessage } from 'vee-validate';
+import { toTypedSchema } from '@vee-validate/zod';
+import * as zod from 'zod';
 import { convertToCurrency } from '@/utils/convert-currency';
+import dayjs from 'dayjs';
 
+interface IShippingInfo {
+  address: string;
+  full_name: string;
+  phone: string;
+}
+
+interface IVoucher {
+  id: string;
+  code: string;
+  discount_value: number;
+  is_active: boolean;
+}
+
+const router = useRouter();
+const cartStore = useCartStore();
+const { cartTotal, cartTotalDiscount, removeProductFromCart, emptyCart } = useCartStore();
+const token = useCookie('token');
+const checkingVoucher = ref(false);
+
+const toast = useNuxtApp().$toast;
+
+function showSuccessMessage() {
+  toast('This is a success message!', 5000);
+}
+
+const validationSchema = toTypedSchema(
+  zod.object({
+    address: zod.string().min(1, {
+      message: 'Address is required',
+    }),
+    full_name: zod.string({
+      required_error: 'Full name is required',
+    }).min(1, {
+      message: 'Full name is required',
+    }),
+    phone: zod.string({
+      required_error: 'Phone number is required',
+    }).min(1, {
+      message: 'Phone number is required',
+    }),
+  })
+);
+
+const { errors, values } = useForm<IShippingInfo>({
+  validateOnMount: false,
+  initialErrors: {
+    address: '',
+    full_name: '',
+    phone: '',
+  },
+  initialValues: {
+    address: '',
+    full_name: '',
+    phone: '',
+  },
+  validationSchema,
+});
 
 const isShowCouponInputForm = ref(false);
 const isShowConfirmModal = ref(false);
 const selectedCartItemId = ref<number | null>(null);
+const couponCode = ref('');
+const isVoucherValid = ref(true);
+const listVouchers = ref<IVoucher[]>([]);
 
 const toggleCouponInputForm = () => {
   isShowCouponInputForm.value = !isShowCouponInputForm.value;
+  if (!isShowCouponInputForm.value) {
+    couponCode.value = '';
+  }
 }
 
 const onRemoveCartItem = async () => {
@@ -20,7 +84,7 @@ const onRemoveCartItem = async () => {
     success: boolean;
   }>(`/api/cart/cart-item/${selectedCartItemId.value}`, {
     baseURL: 'http://localhost:1996',
-    method: 'DELETE',
+    method: 'POST',
   })
   if (data.value?.success) {
     if (selectedCartItemId.value) {
@@ -28,6 +92,79 @@ const onRemoveCartItem = async () => {
     }
   }
 };
+
+const onCheckValidCoupon = async () => {
+  checkingVoucher.value = true;
+  const formData = {
+    voucher_code: couponCode.value,
+  }
+  await useFetch<{
+    success: boolean;
+    data: IVoucher;
+  }>('/api/me/check-voucher', {
+    baseURL: 'http://localhost:1996',
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+    method: 'POST',
+    body: JSON.stringify(formData),
+    onResponse: async ({ response }) => {
+      if (response.ok) {
+        isVoucherValid.value = true;
+        const voucherId = toRaw(response._data.data.id);
+        if (response._data.data && !listVouchers.value.map(item => item.id).includes(voucherId)) {
+          listVouchers.value.push(response._data.data);
+        }
+      }
+    },
+    onResponseError: () => {
+      isVoucherValid.value = false;
+    }
+  })
+  checkingVoucher.value = false;
+};
+
+const createOrder = async (values: any) => {
+  let formData = {
+    issued_date: dayjs().format('YYYY/MM/DD'),
+    payment_status: 'PENDING',
+    contact_detail: {
+      address: values.address,
+      full_name: values.full_name,
+      phone: values.phone,
+    },
+    order_items: cart.value.map(item => ({
+      id: item.product.id,
+      quantity: item.quantity,
+    })),
+    voucher_id: '',
+  }
+  if (listVouchers.value.length > 0) {
+    formData = {
+      ...formData,
+      voucher_id: listVouchers.value[0].id,
+    }
+  }
+  await useFetch<{
+    success: boolean;
+  }>('/api/orders', {
+    baseURL: 'http://localhost:1996',
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+    method: 'POST',
+    body: JSON.stringify(formData),
+    onResponse: async ({ response }) => {
+      if (response.ok) {
+        emptyCart();
+        router.push('/checkout-success');
+      }
+    },
+    onResponseError: () => {
+      toast('Error when creating order', 5000);
+    }
+  })
+}
 
 const { cart } = storeToRefs(cartStore);
 
@@ -40,6 +177,14 @@ const onOpenConfirmModal = (id: number) => {
   isShowConfirmModal.value = true;
   selectedCartItemId.value = id;
 }
+
+const totalDiscountOfVoucher = computed(() => {
+  return listVouchers.value.reduce((acc, voucher) => acc + voucher.discount_value, 0);
+});
+
+const grandTotal = computed(() => {
+  return cartTotalDiscount - totalDiscountOfVoucher.value;
+});
 
 </script>
 
@@ -97,109 +242,170 @@ const onOpenConfirmModal = (id: number) => {
             </tbody>
           </table>
         </div>
-        <div class="data-cart-total flex justify-end">
-          <ul class="cart-total w-[41.66667%] mb-4">
-            <li class="flex justify-between border-t border-b border-solid border-neutral-200">
-              <div class="px-0 py-4">
-                <strong>
-                  Subtotal:
-                </strong>
-              </div>
-              <div class="px-0 py-4">
-                <span>
-                  <ProductPrice :price="cartTotal" :discount_price="cartTotalDiscount" />
-                </span>
-              </div>
-            </li>
-            <li class="border-t">
-              <div class="flex justify-between">
+        <Form :validation-schema="validationSchema" class="my-2" @submit="createOrder">
+          <div class="data-cart-total flex justify-end">
+            <ul class="cart-total w-[41.66667%] mb-4">
+              <li class="flex justify-between border-t border-b border-solid border-neutral-200">
                 <div class="px-0 py-4">
                   <strong>
-                    Shipping:
+                    Subtotal:
                   </strong>
                 </div>
-                <div class="px-0 py-4 text-[#666] text-sm">
+                <div class="px-0 py-4">
                   <span>
-                    Add info
+                    <ProductPrice :price="cartTotal" :discount_price="cartTotalDiscount" />
                   </span>
                 </div>
-              </div>
-              <form class="my-2">
-                <div class="form-group flex items-center mb-4">
+              </li>
+              <li class="border-t">
+                <div class="flex justify-between">
+                  <div class="px-0 py-4">
+                    <strong>
+                      Shipping:
+                    </strong>
+                  </div>
+                  <div class="px-0 py-4 text-[#666] text-sm">
+                    <span>
+                      Add info
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group flex items-start mb-4">
                   <label class="flex-[0_0_30%] text-[#666] text-sm">
                     Address
                   </label>
-                  <input type="text" placeholder="Enter your coupon code"
-                    class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
+                  <div class="flex flex-1 flex-col gap-1">
+                    <Field
+                      name="address" 
+                      type="text" 
+                      placeholder="Enter your address"
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
+                    />
+                    <ErrorMessage class="text-[#cc4749]" name="address" />
+                  </div>
                 </div>
-                <div class="form-group flex items-center mb-4">
+                <div class="form-group flex items-start mb-4">
                   <label class="flex-[0_0_30%] text-[#666] text-sm">
                     Full Name
                   </label>
-                  <input type="text" placeholder="Enter your coupon code"
-                    class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
+                  <div class="flex flex-1 flex-col gap-1">
+                    <Field name="full_name" type="text" placeholder="Enter your coupon code"
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
+                    />
+                    <ErrorMessage class="text-[#cc4749]" name="full_name" />
+                  </div>
                 </div>
-                <div class="form-group flex items-center">
+                <div class="form-group flex items-start">
                   <label class="flex-[0_0_30%] text-[#666] text-sm">
                     Phone Number
                   </label>
-                  <input type="text" placeholder="Enter your coupon code"
-                    class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
+                  <div class="flex flex-1 flex-col gap-1">
+                    <Field name="phone" type="text" placeholder="Enter your coupon code"
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
+                    />
+                    <ErrorMessage class="text-[#cc4749]" name="phone" />
+                  </div>
                 </div>
-              </form>
-            </li>
-            <li class="border-t my-2">
-              <div class="flex justify-between">
+              </li>
+              <li class="border-t my-2">
+                <div class="flex justify-between">
+                  <div class="px-0 py-4">
+                    <strong>
+                      Coupon Code:
+                    </strong>
+                  </div>
+                  <div class="px-0 py-4">
+                    <button type="button" class="cursor-pointer text-[#666] text-sm" @click="toggleCouponInputForm">
+                      {{ isShowCouponInputForm ? 'Cancel' : 'Apply' }}
+                    </button>
+                  </div>
+                </div>
+                <form v-show="isShowCouponInputForm" class="form flex flex-col gap-2">
+                  <div class="flex items-center gap-2">
+                    <input type="text" placeholder="Enter your coupon code"
+                    class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-12 transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
+                    v-model="couponCode"
+                  />
+                  <button
+                    :disabled="!couponCode"
+                    class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-2 border-neutral-200 text-[#666] font-semibold rounded-[25px] px-6 py-[0.57143rem] bg-[#e5e5e5] hover:bg-[#f27002] hover:text-white"
+                    type="button" @click="onCheckValidCoupon">
+                    Apply
+                    <LoadingIndicator v-show="checkingVoucher" color="white" class-names="w-6 h-6" />
+                  </button>
+                  </div>
+                  <p v-if="!isVoucherValid" class="text-[#cc4749]">
+                    Voucher is not valid
+                  </p>
+                  <div class="flex items-center gap-2">
+                    <ul class="list-disc list-inside text-[#666] text-sm">
+                      <li>
+                        <strong>
+                          Voucher code:
+                        </strong>
+                        <Badge v-for="voucher in listVouchers" :key="voucher.id">
+                          <template #badge-content>
+                            {{ voucher.code }}
+                          </template>
+                        </Badge>
+                      </li>
+                      <li>
+                        <strong>
+                          Discount value:
+                        </strong>
+                        <span>
+                          {{ listVouchers.map(voucher => voucher.discount_value).join(', ') }}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </form>
+              </li>
+              <li class="flex justify-between border-t border-b border-solid border-neutral-200">
                 <div class="px-0 py-4">
                   <strong>
-                    Coupon Code:
+                    Gift Certificate:
                   </strong>
                 </div>
                 <div class="px-0 py-4">
-                  <span class="cursor-pointer text-[#666] text-sm" @click="toggleCouponInputForm">
-                    {{ isShowCouponInputForm ? 'Cancel' : 'Apply' }}
+                  <span>
+                    Gift Certificate
                   </span>
                 </div>
-              </div>
-              <form v-show="isShowCouponInputForm" class="form flex items-center gap-2">
-                <input type="text" placeholder="Enter your coupon code"
-                  class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-12 transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
-                <button
-                  class="border-neutral-200 text-[#666] font-semibold rounded-[25px] px-6 py-[0.57143rem] bg-[#e5e5e5] hover:bg-[#f27002] hover:text-white">Apply</button>
-              </form>
-            </li>
-            <li class="flex justify-between border-t border-b border-solid border-neutral-200">
-              <div class="px-0 py-4">
-                <strong>
-                  Gift Certificate:
-                </strong>
-              </div>
-              <div class="px-0 py-4">
-                <span>
-                  Gift Certificate
-                </span>
-              </div>
-            </li>
-            <li class="flex justify-between border-t border-b border-solid border-neutral-200">
-              <div class="px-0 py-4">
-                <strong>
-                  Grand total:
-                </strong>
-              </div>
-              <div class="px-0 py-4">
-                <strong>
-                  {{ convertToCurrency(cartTotalDiscount) }}
-                </strong>
-              </div>
-            </li>
-          </ul>
-        </div>
-        <button
-          class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]">
-          <NuxtLink href="/checkout">
-            Checkout
-          </NuxtLink>
-        </button>
+              </li>
+              <li class="flex justify-between border-t border-b border-solid border-neutral-200">
+                <div class="px-0 py-4">
+                  <strong>
+                    Grand total:
+                  </strong>
+                </div>
+                <div class="px-0 py-4 gap-2 flex">
+                  <strong>
+                    {{ convertToCurrency(grandTotal) }}
+                  </strong>
+                  <span v-if="listVouchers.length > 0" class="text-sm font-bold text-gray-500 dark:text-gray-400 text-[#f27002] line-through">
+                    {{ convertToCurrency(cartTotalDiscount) }}
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <button
+            class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
+            type="button"
+            @click="showSuccessMessage"
+          >
+              show toast
+          </button>
+          <button
+            class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
+            type="submit"
+          >
+            <!-- <NuxtLink href="/checkout"> -->
+              Checkout
+            <!-- </NuxtLink> -->
+          </button>
+        </Form>
         <div class="clear-both" />
       </div>
     </div>
