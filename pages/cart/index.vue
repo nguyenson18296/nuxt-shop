@@ -6,6 +6,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import * as zod from 'zod';
 import { convertToCurrency } from '@/utils/convert-currency';
 import dayjs from 'dayjs';
+import { useCartStore } from '@/stores/cart';
 
 interface IShippingInfo {
   address: string;
@@ -22,6 +23,7 @@ interface IVoucher {
 
 const router = useRouter();
 const cartStore = useCartStore();
+
 const { cartTotal, cartTotalDiscount, removeProductFromCart, emptyCart } = useCartStore();
 const token = useCookie('token');
 const checkingVoucher = ref(false);
@@ -29,7 +31,7 @@ const checkingVoucher = ref(false);
 const toast = useNuxtApp().$toast;
 
 function showSuccessMessage() {
-  toast('This is a success message!', 5000);
+  toast('Create order failed. Please try again!', 5000);
 }
 
 const validationSchema = toTypedSchema(
@@ -224,15 +226,15 @@ const grandTotal = computed(() => {
                   </h3>
                 </td>
                 <td class="table-cell">
-                  <ProductPrice :price="item.product.price" :discount_price="item.product.discount_price" />
+                  <ProductPrice :price="+item.product.price" :discount_price="+item.product.discount_price" />
                 </td>
                 <td class="table-cell text-center">
                   {{ item.quantity }}
                 </td>
                 <td class="text-right">
                   <div class="flex gap-1 items-center">
-                    <ProductPrice :price="(item.product.price * item.quantity)"
-                      :discount_price="item.product.discount_price * item.quantity" />
+                    <ProductPrice :price="(+item.product.price * item.quantity)"
+                      :discount_price="+item.product.discount_price * item.quantity" />
                     <button @click.stop="() => onOpenConfirmModal(item.id)">
                       <PhTrash size="24" />
                     </button>

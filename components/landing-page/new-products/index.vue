@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SwiperSlide } from 'swiper/vue';
+import { useFetch } from 'nuxt/app';
 
 interface IProduct {
   product_id: number;
@@ -16,7 +17,12 @@ definePageMeta({
   layout: "landing-page-section"
 })
 
-const { data } = await useFetchBaseUrl<IProduct[]>('/api/products/newest');
+const { data } = await useFetch<{
+  data: IProduct[];
+}>('/api/products/newest', {
+  baseURL: 'http://localhost:1996',
+  method: 'GET'
+});
 
 const products = data.value?.data || [];
 </script>
