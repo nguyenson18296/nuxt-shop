@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhShoppingCart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
+import { storeToRefs } from 'pinia';
+import { PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
+import { useAuthStore, type UserInterface } from '@/stores/auth';
 
 const { user, authenticated } = storeToRefs(useAuthStore());
 const { setUser } = useAuthStore();
@@ -28,7 +30,9 @@ getMe();
     <div class="header-center bg-[#443e40] px-0 py-[15px] w-full">
       <div class="container !flex items-center">
         <div class="header-logo text-center mt-[22px] mb-[19px] mx-0 lg:p-0">
-          <img src="/img/flex-cart.webp" alt="flex-cart" />
+          <NuxtLink href="/">
+            <img src="/img/flex-cart.webp" alt="flex-cart" />
+          </NuxtLink>
         </div>
         <div class="search-bar w-[40%] px-[15px] py-0">
           <div class="w-full relative">

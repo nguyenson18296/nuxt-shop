@@ -10,6 +10,7 @@ const toastList = ref<IToast[]>([]);
 
 export const useToast = () => {
   function addToast(message: string, duration: number) {
+    console.log('message', message);
     const id = Math.random().toString(36).substr(2, 9);
     toastList.value.push({ id, message, duration });
 

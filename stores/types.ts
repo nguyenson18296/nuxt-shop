@@ -9,8 +9,8 @@ export interface IProductItem {
   title: string;
   slug: string;
   thumbnail: string;
-  price: number;
-  discount_price: number;
+  price: string;
+  discount_price: string;
   in_stock: number;
   created_at: string;
   updated_at: string;

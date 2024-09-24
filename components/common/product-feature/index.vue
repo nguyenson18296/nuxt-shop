@@ -16,7 +16,7 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
 
 <template>
   <div class="py-0 px-[15px] h-[420px]">
-    <div class="card mt-[1.07143rem] mx-0 my-2.5 w-full bg-white transition-all duration-[0.4s] ease-[ease-in-out]">
+    <div class="card mt-[1.07143rem] mx-0 my-2.5 w-full bg-white transition-all duration-[0.4s] ease-[ease-in-out] relative">
       <div class="wdgimg-bg" />
       <figure class="card-figure relative bg-white">
         <div class="title-brand px-[15px] py-2.5">
