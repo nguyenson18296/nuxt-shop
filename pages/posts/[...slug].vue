@@ -36,6 +36,7 @@ async function fetchData() {
   }>(`/api/posts/${slug}`, {
     baseURL: 'http://localhost:1996',
     method: 'GET',
+    key: `post-${slug}`,
   });
 
   // Execute the fetch and await its completion

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PhShoppingCart } from '@phosphor-icons/vue';
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from 'pinia';
 
 const store = useCartStore();
 

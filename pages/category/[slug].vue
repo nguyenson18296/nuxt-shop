@@ -15,16 +15,16 @@ const slug = route.params.slug;
 const products = ref<IProductItem[]>([]);
 const category = ref<ICategory>({} as ICategory);
 
-const { data } = useFetch<{
+await useFetch<{
   data: ICategory;
 }>(`/api/categories/${slug}`, {
   baseURL: 'http://localhost:1996',
   method: 'GET',
   onResponse: ({ response }) => {
-    category.value = response._data.data;
     if (!response.ok) {
-      console.error('Failed to fetch category');
+      return console.error('Failed to fetch category');
     }
+    category.value = response._data.data;
   }
 });
 

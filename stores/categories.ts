@@ -20,4 +20,21 @@ export const useCategoriesStore = defineStore('categories', {
       categories: [],
     };
   },
+  actions: {
+    async fetchCategories() {
+      const data = await $fetch<{
+        success: boolean;
+        data: ICategory[];
+      }>('/api/categories', {
+        baseURL: 'http://localhost:1996',
+        method: 'GET',
+      });
+      if (data.success) {
+        this.categories = data.data;
+      }
+    },
+    setCategories(categories: ICategory[]) {
+      this.categories = categories;
+    },
+  }
 });
