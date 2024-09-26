@@ -7,6 +7,11 @@ defineProps({
     required: false,
     default: 'justify-center',
   },
+  fontSize: {
+    type: String,
+    required: false,
+    default: 'text-lg',
+  },
   price: {
   type: Number,
     required: true,
@@ -21,7 +26,9 @@ defineProps({
 <template>
   <div :class="classNames" class="price flex items-center gap-2">
     <template v-if="discount_price">
-      <span class="text-lg font-bold text-gray-800 dark:text-gray-200">
+      <span class="font-bold text-gray-800 dark:text-gray-200"
+        :class="fontSize"
+      >
         {{ convertToCurrency(discount_price ?? 0) }}
       </span>
       <span class="text-sm font-bold text-gray-500 dark:text-gray-400"

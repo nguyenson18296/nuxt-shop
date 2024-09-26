@@ -2,6 +2,10 @@
 import { PhCaretCircleDown, PhCaretCircleUp } from '@phosphor-icons/vue'; 
 
 const props = defineProps({
+  productId: {
+    type: Number,
+    required: true,
+  },
   quantity: {
     type: Number,
     required: true,
@@ -23,7 +27,7 @@ const decrement = () => {
 }
 
 watch(quantity, (newValue) => {
-  emit('update:quantity', newValue);
+  emit('update:quantity', newValue, props.productId);
 });
 </script>
 
