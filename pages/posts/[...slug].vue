@@ -4,7 +4,9 @@ import dayjs from 'dayjs';
 interface IPost {
   id: number;
   title: string;
+  seo_title: string;
   slug: string;
+  seo_description: string;
   content: string;
   thumbnail: string;
   created_at: string;
@@ -16,13 +18,45 @@ const route = useRoute()
 
 const slug = route.params.slug[0];
 
-const { data } = useFetch<{ data: IPost }>(`/api/posts/${slug}`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET'
+const postDetail = ref<IPost>({} as IPost);
+
+const { startLoading, stopLoading } = useLoading();
+
+startLoading();
+
+onMounted(() => {
+  fetchData();
 });
 
-const postDetail = data.value?.data ?? {} as IPost;
-console.log('postDetail', postDetail);
+async function fetchData() {
+  startLoading();
+  const { data, execute, status } = useFetch<{
+    data: IPost;
+    success: boolean;
+  }>(`/api/posts/${slug}`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+  });
+
+  // Execute the fetch and await its completion
+  await execute();
+
+  if (data.value?.success) {
+    postDetail.value = data.value.data;
+  } else {
+    // Handle errors or unsuccessful fetch
+    console.error('Failed to fetch post: ', status);
+  }
+  stopLoading();
+}
+
+useServerSeoMeta({
+  title: `Vue Shop - E-commerce - ${postDetail.value.seo_title}`,
+  ogTitle: `Explore Vue Shop - E-commerce | ${postDetail.value.seo_title}`,
+  description: postDetail.value.seo_description,
+  ogDescription: postDetail.value.seo_description,
+})
+
 </script>
 
 <template>

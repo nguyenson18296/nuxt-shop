@@ -21,10 +21,19 @@ interface IVoucher {
   is_active: boolean;
 }
 
+useSeoMeta({
+  title: 'Vue Shop - E-commerce - Your Cart',
+  ogTitle: 'Vue Shop - E-commerce - Your Cart',
+  description: 'Vue Shop - E-commerce - Your Cart',
+  ogDescription: 'Vue Shop - E-commerce - Your Cart',
+})
+
 const router = useRouter();
 const cartStore = useCartStore();
 
-const { cartTotal, cartTotalDiscount, removeProductFromCart, emptyCart } = useCartStore();
+const { removeProductFromCart, emptyCart } = useCartStore();
+const { cart, cartTotalDiscount, cartTotal } = storeToRefs(cartStore);
+
 const token = useCookie('token');
 const checkingVoucher = ref(false);
 
@@ -51,6 +60,9 @@ const validationSchema = toTypedSchema(
     }),
   })
 );
+
+console.log('cartTotalDiscount', cartTotalDiscount.value)
+console.log('cartTotal', cartTotal.value)
 
 const { errors, values } = useForm<IShippingInfo>({
   validateOnMount: false,
@@ -121,6 +133,7 @@ const onCheckValidCoupon = async () => {
     },
     onResponseError: () => {
       isVoucherValid.value = false;
+      showSuccessMessage();
     }
   })
   checkingVoucher.value = false;
@@ -168,8 +181,6 @@ const createOrder = async (values: any) => {
   })
 }
 
-const { cart } = storeToRefs(cartStore);
-
 const onCancelDelete = () => {
   isShowConfirmModal.value = false;
   selectedCartItemId.value = null;
@@ -185,8 +196,12 @@ const totalDiscountOfVoucher = computed(() => {
 });
 
 const grandTotal = computed(() => {
-  return cartTotalDiscount - totalDiscountOfVoucher.value;
+  return cartTotalDiscount.value - totalDiscountOfVoucher.value;
 });
+
+const updateQuantity = (newQuantity: number, id: number) => {
+  cartStore.updateQuantity(id, newQuantity);
+};
 
 </script>
 
@@ -197,7 +212,7 @@ const grandTotal = computed(() => {
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs title="Your cart" />
     <div class="container py-8">
-      <div class="w-[80%] float-left float-none mx-auto px-3">
+      <div class="mx-auto px-3">
         <SectionHeader title="Your cart" bgText="#fff" />
         <div data-cart-content>
           <table class="cart block lg:table">
@@ -209,11 +224,13 @@ const grandTotal = computed(() => {
                 <th class="hidden lg:table-cell text-right">Total</th>
               </tr>
             </thead>
-            <tbody class="border-t-neutral-200 border-b-neutral-200 border-t border-solid border-b">
-              <tr class="cart-item table-row hover:bg-[#f3f3f3]" v-for="item in cart" :key="item.product.id">
-                <td>
-                  <NuxtImg :src="item.product.thumbnail" :alt="item.product.title" width="100" height="100"
-                    layout="fixed" />
+            <tbody class="border-t-neutral-200 border-t border-solid">
+              <tr class="cart-item table-row border-b-neutral-200 border-b" v-for="item in cart" :key="item.product.id">
+                <td class="py-2">
+                  <div>
+                    <NuxtImg :src="item.product.thumbnail" :alt="item.product.title" width="100"
+                      layout="fixed" class="max-w-[100px] p-2 border border-neutral-200 mx-0 my-2.5 rounded-lg border-solid" />
+                  </div>
                 </td>
                 <td class="table-cell p-6">
                   <h4 class="cart-item-brand text-[#999] mb-[0.21429rem] text-sm">
@@ -226,15 +243,26 @@ const grandTotal = computed(() => {
                   </h3>
                 </td>
                 <td class="table-cell">
-                  <ProductPrice :price="+item.product.price" :discount_price="+item.product.discount_price" />
+                  <ProductPrice
+                    :price="+item.product.price" 
+                    :discount_price="+item.product.discount_price"
+                    font-size="text-sm"
+                  />
                 </td>
                 <td class="table-cell text-center">
-                  {{ item.quantity }}
+                  <!-- {{ item.quantity }} -->
+                  <QuantityInput
+                    :quantity="item.quantity"
+                    :product-id="item.product.id"
+                    @update:quantity="($event) => updateQuantity($event, item.id)"
+                  />
                 </td>
                 <td class="text-right">
-                  <div class="flex gap-1 items-center">
+                  <div class="flex gap-1 items-center justify-end">
                     <ProductPrice :price="(+item.product.price * item.quantity)"
-                      :discount_price="+item.product.discount_price * item.quantity" />
+                      :discount_price="+item.product.discount_price * item.quantity"
+                      font-size="text-sm"
+                    />
                     <button @click.stop="() => onOpenConfirmModal(item.id)">
                       <PhTrash size="24" />
                     </button>
@@ -247,7 +275,7 @@ const grandTotal = computed(() => {
         <Form :validation-schema="validationSchema" class="my-2" @submit="createOrder">
           <div class="data-cart-total flex justify-end">
             <ul class="cart-total w-[41.66667%] mb-4">
-              <li class="flex justify-between border-t border-b border-solid border-neutral-200">
+              <li class="flex justify-between border-b border-solid border-neutral-200">
                 <div class="px-0 py-4">
                   <strong>
                     Subtotal:
@@ -392,13 +420,6 @@ const grandTotal = computed(() => {
               </li>
             </ul>
           </div>
-          <button
-            class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
-            type="button"
-            @click="showSuccessMessage"
-          >
-              show toast
-          </button>
           <button
             class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
             type="submit"

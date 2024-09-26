@@ -11,6 +11,13 @@ watch(authenticated, (newValue, oldValue) => {
   }
 }, { immediate: false });
 
+useSeoMeta({
+  title: 'Vue Shop - E-commerce - Login',
+  ogTitle: 'Vue Shop - E-commerce - Login',
+  description: 'Vue Shop - E-commerce - Login',
+  ogDescription: 'Vue Shop - E-commerce - Login',
+})
+
 </script>
 
 <template>

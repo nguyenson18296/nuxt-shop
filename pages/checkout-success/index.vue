@@ -1,3 +1,12 @@
+<script setup lang="ts">
+useSeoMeta({
+  title: 'Vue Shop - E-commerce - Checkout success',
+  ogTitle: 'Vue Shop - E-commerce - Checkout success',
+  description: 'Vue Shop - E-commerce - Checkout success',
+  ogDescription: 'Vue Shop - E-commerce - Checkout success',
+})
+</script>
+
 <template>
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs title="Checkout Success"/>

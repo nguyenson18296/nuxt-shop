@@ -1,10 +1,19 @@
 <script setup lang="ts">
 const appConfig = useAppConfig();
+const { start } = useLoadingIndicator({
+  duration: 2000
+});
 
+definePageMeta({
+  title: 'Home',
+  description: 'Home page',
+})
+
+start();
 </script>
 
 <template>
-  <NuxtLayout name="page-wrapper">
+    <NuxtLayout name="page-wrapper">
     <section>
       <Hero />
     </section>

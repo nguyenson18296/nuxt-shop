@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { PhList } from '@phosphor-icons/vue';
 
-const { data, status } = await useLazyFetch<{ data: ICategory[] }>(`/api/categories`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET'
-});
-
-const categories = data.value?.data ?? [] as ICategory[];
-
+const { categories } = useCategoriesStore();
 </script>
 
 <template>

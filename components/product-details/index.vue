@@ -140,6 +140,7 @@ const addToCart = () => {
             </div> -->
             <QuantityInput
               :quantity="quantity"
+              :product-id="id"
               @update:quantity="updateQuantity"
             />
             <div>

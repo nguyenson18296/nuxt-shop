@@ -14,6 +14,7 @@ export interface IProductItem {
   in_stock: number;
   created_at: string;
   updated_at: string;
+  short_description: string;
   description: string;
   images: string[];
 }

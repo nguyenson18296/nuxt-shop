@@ -48,17 +48,25 @@ export const useCartStore = defineStore('cart', {
     },
     emptyCart() {
       this.cart = [];
+    },
+    updateQuantity(id: number, quantity: number) {
+      const cartIndex = this.cart.findIndex((item: ICartItem) => item.id === id);
+      console.log('cartIndex', cartIndex);
+      if (cartIndex !== -1) {
+        this.cart[cartIndex].quantity = quantity;
+      }
+      this.cart = this.cart;
     }
   },
   getters: {
     cartTotal(): number {
       return this.cart.reduce((total: number, item: ICartItem) => {
-        return total + item.product.price * item.quantity;
+        return total + (+item.product.price * item.quantity);
       }, 0);
     },
     cartTotalDiscount(): number {
       return this.cart.reduce((total: number, item: ICartItem) => {
-        return total + item.product.discount_price * item.quantity;
+        return total + (+item.product.discount_price * item.quantity);
       }, 0);
     },
   }
