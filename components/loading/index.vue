@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const { isLoading } = useLoading();
-
-console.log('isLoading', isLoading.value);
-
 </script>
 
 <template>

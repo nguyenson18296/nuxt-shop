@@ -20,16 +20,34 @@ const comment = defineModel<string>('comment', {
   default: ''
 });
 
+const reviews = ref<IReview[]>([]);
 const route = useRoute()
 const slug = route.params.slug[0];
 const { authenticated, user } = useAuthStore();
 
-const { data } = await useFetch<{ data: IReview[] }>(`/api/product-reviews/${slug}`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET'
+onMounted(() => {
+  fetchData();
 });
 
-const reviews = data.value?.data ?? [] as IReview[];
+async function fetchData() {
+  const { data, execute, status } = useFetch<{
+    data: IReview[];
+    success: boolean;
+  }>(`/api/product-reviews/${slug}`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+  });
+
+  // Execute the fetch and await its completion
+  await execute();
+
+  if (data.value?.success) {
+    reviews.value = data.value.data;
+  } else {
+    // Handle errors or unsuccessful fetch
+    console.error('Failed to fetch reviews: ', status);
+  }
+}
 
 const createComment = async () => {
   try {
@@ -45,7 +63,7 @@ const createComment = async () => {
       onResponse: async ({ response }) => {
         if (response.ok) {
           const data = response._data.data
-          reviews.push(data);
+          reviews.value.push(data);
           comment.value = '';
           selectedRepliedId.value = 0;
         }
@@ -73,7 +91,7 @@ const createReplyComment = async (replyId: number) => {
     onResponse: async ({ response }) => {
       if (response.ok) {
         const data = response._data.data
-        const parentComment = reviews.find((review: IReview) => review.id === replyId)
+        const parentComment = reviews.value.find((review: IReview) => review.id === replyId)
         if (parentComment) {
           parentComment.replies.push(data)
         }

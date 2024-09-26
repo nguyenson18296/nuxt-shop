@@ -129,15 +129,6 @@ const addToCart = () => {
             </label>
           </div>
           <div class="flex items-center text-[#222]">
-            <!-- <div class="flex items-center gap-1">
-              <button @click="decrement">
-                <PhCaretCircleDown size="20" />
-              </button>
-              <input type="number" v-model="quantity" class="text-sm font-bold h-auto text-center w-10 p-0 border-0" />
-              <button @click="increment">
-                <PhCaretCircleUp size="20" />
-              </button>
-            </div> -->
             <QuantityInput
               :quantity="quantity"
               :product-id="id"
@@ -145,7 +136,8 @@ const addToCart = () => {
             />
             <div>
               <button
-                class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem]"
+                class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem] disabled:bg-[#dcdcdc] disabled:cursor-not-allowed disabled:hover:bg-[#dcdcdc]"
+                :disabled="in_stock === 0"
                 @click="addToCart"
               >
                 Add to Cart
@@ -196,11 +188,11 @@ const addToCart = () => {
 </template>
 
 <style scoped>
-.btn-primary {
+.btn-primary:enabled {
   transition: all .15s ease;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:enabled {
   background-color: #f27002;
 }
 </style>

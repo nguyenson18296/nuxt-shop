@@ -1,16 +1,4 @@
 <script setup lang="ts">
-type PostType = 'normal' | 'headline' | 'first_headline' | 'second_headline';
-
-interface IPost {
-  id: number;
-  title: string;
-  slug: string;
-  short_description: string;
-  content: string;
-  cover_photo: string;
-  created_at: string;
-  post_type: PostType;
-}
 
 useServerSeoMeta({
   title: 'Vue Shop - E-commerce - Blog Posts | Your Source for the Latest News',
@@ -20,6 +8,8 @@ useServerSeoMeta({
 })
 
 const posts = ref<IPost[]>([]);
+const canFetchMore = ref(true);
+const currentPage = ref(1);
 
 const { startLoading, stopLoading } = useLoading();
 
@@ -36,14 +26,21 @@ async function fetchData() {
     success: boolean;
   }>('/api/posts', {
     baseURL: 'http://localhost:1996',
+    params: {
+      page: currentPage.value,
+    },
     method: 'GET',
+    key: `posts-${currentPage.value}`,
   });
 
   // Execute the fetch and await its completion
   await execute();
 
   if (data.value?.success) {
-    posts.value = data.value.data;
+    if (data.value.data.length < 10) {
+      canFetchMore.value = false;
+    }
+    posts.value = posts.value.concat(data.value.data);
   } else {
     // Handle errors or unsuccessful fetch
     console.error('Failed to fetch posts:', status);
@@ -51,19 +48,20 @@ async function fetchData() {
   stopLoading();
 }
 
+const fetchMorePosts = () => {
+  currentPage.value += 1;
+  fetchData();
+};
+
 const trendingPosts = computed(() => {
   return posts.value.filter((post) => post.post_type === 'second_headline');
 });
 const trendingRightPosts = computed(() => {
   return posts.value.filter((post) => post.post_type === 'first_headline');
 });
-const normalPosts = computed(() => {
-  return posts.value.filter((post) => post.post_type === 'normal');
-});
 const headlinePost = computed(() => {
   return posts.value.find((post) => post.post_type === 'headline');
 });
-
 
 </script>
 
@@ -117,29 +115,11 @@ const headlinePost = computed(() => {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-y-4 gap-x-8">
-        <div class="grid-cols-6" v-for="post in posts" :key="post.id">
-          <a :href="`/posts/${post.slug}`">
-            <div class="card flex items-start gap-4">
-              <figure class="flex-[0_0_50%]">
-                <img :src="post.cover_photo" :alt="post.title" class="h-[200px] object-cover" />
-              </figure>
-              <div class="flex-[0_0_50%]">
-                <h2
-                  class="blog-header font-semibold text-left border-b-neutral-200 capitalize relative ml-0 mb-[15px] pb-2.5 border-b border-solid">
-                  {{ post.title }}
-                </h2>
-                <p class="text-[#666] mb-6 text-sm">
-                  {{ post.created_at }}
-                </p>
-                <p class="post-description">
-                  {{ post.short_description }}
-                </p>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
+      <PostsList
+        :posts="posts"
+        :can-fetch-more="canFetchMore"
+        @fetch-more-posts="fetchMorePosts"
+      />
     </div>
   </NuxtLayout>
 </template>

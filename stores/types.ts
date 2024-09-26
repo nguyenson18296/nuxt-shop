@@ -1,3 +1,11 @@
+export interface IListResponse<T> {
+  data: T[];
+  success: boolean;
+  limit: number;
+  total: number;
+  page: number;
+}
+
 export interface ICartItem {
   id: number;
   quantity: number;
@@ -17,4 +25,17 @@ export interface IProductItem {
   short_description: string;
   description: string;
   images: string[];
+}
+
+export type PostType = 'normal' | 'headline' | 'first_headline' | 'second_headline';
+
+export interface IPost {
+  id: number;
+  title: string;
+  slug: string;
+  short_description: string;
+  content: string;
+  cover_photo: string;
+  created_at: string;
+  post_type: PostType;
 }

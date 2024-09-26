@@ -1,7 +1,6 @@
 <script lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Autoplay } from 'swiper/modules';
-import OfferBannerItem from './offer-banner-item.vue';
 
 interface ICategory {
   id: number;

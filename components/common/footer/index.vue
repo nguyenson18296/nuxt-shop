@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { PhMapPin, PhEnvelope, PhPhone } from "@phosphor-icons/vue";
+import { storeToRefs } from 'pinia';
+
 import { useCategoriesStore } from "@/stores/categories";
 
 const categoriesStore = useCategoriesStore();
 
-const categories = categoriesStore.categories;
+const { categories } = storeToRefs(categoriesStore);
+
+onMounted(async () => {
+  await categoriesStore.fetchCategories();
+});
 
 </script>
 
