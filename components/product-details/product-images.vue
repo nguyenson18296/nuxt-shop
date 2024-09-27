@@ -9,6 +9,10 @@ const props = defineProps({
 
 const mainImage = ref(props.thumbnail);
 
+watch(() => props.thumbnail, (newVal) => {
+  mainImage.value = newVal;
+});
+
 const onImageChange = (image: string) => {
   mainImage.value = image;
 };
@@ -16,17 +20,14 @@ const onImageChange = (image: string) => {
 
 <template>
   <div class="product-images mb-12">
-    <figure class="border border-neutral-200 overflow-hidden rounded-lg border-solid min-h-[400px] flex items-center justify-center">
+    <figure
+      class="border border-neutral-200 overflow-hidden rounded-lg border-solid h-[550px] w-[560px] flex items-center justify-center">
       <ZoomableImage :src="mainImage" alt="Product thumbnail" />
     </figure>
     <ul class="flex items-center gap-4 mt-5">
-      <li
-        v-for="image in images" 
-        :key="image" 
-        class="border border-neutral-200 w-full overflow-hidden rounded-lg border-solid"
-        :style="{ borderColor: image === mainImage ? '#777' : '#f3f4f6' }"
-        @click="onImageChange(image)"
-      >
+      <li v-for="image in images" :key="image"
+        class="flex justify-center border border-neutral-200 w-full overflow-hidden rounded-lg border-solid"
+        :style="{ borderColor: image === mainImage ? '#777' : '#f3f4f6' }" @click="onImageChange(image)">
         <NuxtImg :src="image" alt="Product image" class="h-[120px] w-[95px]" />
       </li>
     </ul>

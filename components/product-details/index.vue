@@ -51,10 +51,10 @@ const addToCart = () => {
 <template>
   <div class="container">
     <div class="product-view pt-4 flex items-start gap-8">
-      <div class="product-view-images flex-[0_0_45%]">
+      <div class="product-view-images flex-[0_0_40%]">
         <ProductImages :thumbnail="thumbnail" :images="images" />
       </div>
-      <div class="product-details flex-[0_0_55%]">
+      <div class="product-details flex-[0_0_60%]">
         <h1
           class="border-b-neutral-200 text-[#222] capitalize font-bold text-lg leading-6 mt-0 mb-3 mx-0 pb-3 border-b border-solid">
           {{ title }}
@@ -129,17 +129,11 @@ const addToCart = () => {
             </label>
           </div>
           <div class="flex items-center text-[#222]">
-            <QuantityInput
-              :quantity="quantity"
-              :product-id="id"
-              @update:quantity="updateQuantity"
-            />
+            <QuantityInput :quantity="quantity" :product-id="id" @update:quantity="updateQuantity" />
             <div>
               <button
                 class="ml-5 btn btn-primary bg-[#443e40] tracking-[1px] rounded-[25px] text-white font-semibold text-sm leading-[18px] px-[2.28571rem] py-[0.85714rem] disabled:bg-[#dcdcdc] disabled:cursor-not-allowed disabled:hover:bg-[#dcdcdc]"
-                :disabled="in_stock === 0"
-                @click="addToCart"
-              >
+                :disabled="in_stock === 0" @click="addToCart">
                 Add to Cart
               </button>
             </div>
@@ -183,7 +177,7 @@ const addToCart = () => {
       </div>
     </div>
     <ProductDescription :description="description" />
-    <RelatedProducts />
+    <RelatedProducts :number-of-slides="5" />
   </div>
 </template>
 

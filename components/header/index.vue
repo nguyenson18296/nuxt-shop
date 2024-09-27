@@ -34,20 +34,7 @@ getMe();
             <img src="/img/flex-cart.webp" alt="flex-cart" />
           </NuxtLink>
         </div>
-        <div class="search-bar w-[40%] px-[15px] py-0">
-          <div class="w-full relative">
-            <input class="w-full px-4 text-sm h-[50px] text-[#666] rounded-lg border-[none] bg-white" />
-            <div class="search-icon absolute top-0 right-0 bottom-0 flex items-center justify-center">
-              <button
-                class="flex items-center gap-2 bg-[#443e40] text-white tracking-[1px] h-11 normal-case float-left w-auto relative transition-[0.5s] duration-[ease-in-out] mx-[5px] my-[3px] px-5 py-3.5 rounded-lg border-[none]">
-                <span>
-                  Search
-                </span>
-                <PhMagnifyingGlass :size="24" />
-              </button>
-            </div>
-          </div>
-        </div>
+        <SearchBox />
         <div
           class="bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white flex items-center gap-2">
           <PhPhone />

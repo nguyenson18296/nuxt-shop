@@ -12,8 +12,16 @@ interface IProduct {
   discount_price: string;
 }
 
+defineProps({
+  numberOfSlides: {
+    type: Number,
+    required: false,
+    default: 6,
+  },
+})
+
 definePageMeta({
-  layout: "landing-page-section"
+  layout: "landing-page-section",
 })
 
 const { data } = await useFetch<{
@@ -32,7 +40,7 @@ const products = data.value?.data || [];
     section-title="Related Products"
     bg-section="#fff"
     bg-text="#fff"
-    number-of-slides="6"
+    :number-of-slides="numberOfSlides"
   >
     <swiper-slide v-for="product in products" :key="product.id">
       <ProductFeature :img-src="product.thumbnail" :second-img-src="product.images?.[0] ?? ''" :title="product.title" :slug="product.slug" :product-in-stock="product.in_stock" :price="product.price" :discount-price="product.discount_price" />

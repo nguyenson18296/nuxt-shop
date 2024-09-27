@@ -8,18 +8,47 @@ const token = useCookie('token')
 
 const product = ref<IProductItem>({} as IProductItem);
 
-await useFetch<{
-  data: IProductItem;
-}>(`/api/products/${slug}`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET',
-  onResponse: ({ response }) => {
-    if (!response.ok) {
-      return console.error('Failed to fetch product');
-    }
-    product.value = response._data.data;
-  }
+const { startLoading, stopLoading } = useLoading();
+
+startLoading();
+
+onMounted(() => {
+  fetchData();
 });
+
+async function fetchData() {
+  const { data, execute, status } = useFetch<{
+    data: IProductItem;
+    success: boolean;
+  }>(`/api/products/${slug}`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+    // key: `product-${slug}`,
+  });
+
+  // Execute the fetch and await its completion
+  await execute();
+
+  if (data.value?.success) {
+    product.value = data.value.data;
+  } else {
+    // Handle errors or unsuccessful fetch
+    console.error('Failed to fetch product: ', status);
+  }
+  stopLoading();
+}
+// await useFetch<{
+//   data: IProductItem;
+// }>(`/api/products/${slug}`, {
+//   baseURL: 'http://localhost:1996',
+//   method: 'GET',
+//   onResponse: ({ response }) => {
+//     if (!response.ok) {
+//       return console.error('Failed to fetch product');
+//     }
+//     product.value = response._data.data;
+//   }
+// });
 
 useSeoMeta({
   title: `Vue Shop - E-commerce - ${product.value.title} | Detail`,
@@ -50,6 +79,8 @@ const addToCart = async (quantity: number) => {
     addProductToCart(toRaw(product), quantity);
   }
 }
+
+console.log('product', product.value);
 
 </script>
 
