@@ -25,21 +25,13 @@ const closeDropdown = (event: MouseEvent) => {
 
 <template>
   <div class="relative">
-    <button
-      :id="dropdownButtonId"
-      data-dropdown-toggle="dropdown"
-      @click="toggleDropdown"
-    >
+    <button :id="dropdownButtonId" data-dropdown-toggle="dropdown" @click="toggleDropdown">
       <slot name="trigger" />
     </button>
-      <div
-        v-on-click-outside="closeDropdown"
-        v-if="isOpenDropdown"
-        id="dropdown" 
-        class="absolute top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-        :class="contentClassNames"
-      >
-        <slot name="dropdown-content" />
+    <div v-on-click-outside="closeDropdown" v-if="isOpenDropdown" id="dropdown"
+      class="absolute top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+      :class="contentClassNames">
+      <slot name="dropdown-content" />
     </div>
   </div>
 </template>

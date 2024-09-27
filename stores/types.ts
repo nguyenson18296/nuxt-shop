@@ -39,3 +39,6 @@ export interface IPost {
   created_at: string;
   post_type: PostType;
 }
+
+export type FunctionArgs<Args extends any[] = any[], Return = void> = (...args: Args) => Return;
+export type MaybeRef<T> = T | Ref<T>;

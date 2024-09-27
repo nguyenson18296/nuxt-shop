@@ -25,8 +25,8 @@ const route = useRoute()
 const slug = route.params.slug[0];
 const { authenticated, user } = useAuthStore();
 
-onMounted(() => {
-  fetchData();
+onMounted(async () => {
+  await fetchData();
 });
 
 async function fetchData() {
@@ -36,6 +36,7 @@ async function fetchData() {
   }>(`/api/product-reviews/${slug}`, {
     baseURL: 'http://localhost:1996',
     method: 'GET',
+    key: `product-reviews-${slug}`,
   });
 
   // Execute the fetch and await its completion
@@ -112,10 +113,13 @@ const selectedRepliedId = defineModel<number>('selectedRepliedId', {
 const onToggleReply = (replyId: number) => {
   selectedRepliedId.value = replyId
 }
+
+console.log('reviews', reviews.value)
 </script>
 
 <template>
-  <div class="user-ratings">
+  <div>
+    <div class="user-ratings" v-if="reviews.length > 0">
     <div v-for="review in reviews" :key="review.id" class="product-ratings hover:bg-[#fbfbfb] flex items-start">
       <a class="avatar text-center w-10 mr-2.5">
         <div class="user-avatar h-10 w-10 border-0">
@@ -206,5 +210,6 @@ const onToggleReply = (replyId: number) => {
         </button>
       </div>
     </div>
+  </div>
   </div>
 </template>

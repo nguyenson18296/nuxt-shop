@@ -36,13 +36,8 @@ const resetZoom = () => {
 
 <template>
   <div class="zoom-container">
-    <NuxtImg
-      :src="src"
-      :alt="alt"
-      :style="imgStyles"
-      @mousemove="handleZoom"
-      @mouseleave="resetZoom"
-    />
+    <NuxtImg :src="src" :alt="alt" :style="imgStyles" @mousemove="handleZoom" @mouseleave="resetZoom" width="500"
+      height="500" />
   </div>
 </template>
 
@@ -51,6 +46,7 @@ const resetZoom = () => {
   overflow: hidden;
   cursor: zoom-in;
 }
+
 .zoom-container img {
   transition: transform 0.1s ease;
 }
