@@ -20,37 +20,32 @@ const props = defineProps({
 
 const rangePages = ref<number[]>([]);
 
-// onMounted(() => {
-//   rangePages.value = Array.from({ length: props.total / props.perPage }, (_, i) => i + 1);
-// });
-
-console.log('total', props.total);
-console.log('perPage', props.perPage);
-
 watch([() => props.total, () => props.perPage], ([total, perPage], [oldTotal, oldPerPage]) => {
   if (total !== oldTotal || perPage !== oldPerPage) {
-    console.log('Updated total or perPage:', total, perPage);
     rangePages.value = Array.from({ length: Math.ceil(total / perPage) }, (_, i) => i + 1);
   }
 }, {
   immediate: true // Ensures this runs on initial setup as well
 });
-
-// const rangePages = Array.from({ length: props.total / props.perPage }, (_, i) => i + 1);
-const totalPages = computed(() => Math.ceil(props.total / props.perPage));
 </script>
 
 <template>
   <div class="pagination">
     <ul class="pagination-list flex gap-2">
-      <li class="pagination-item">
+      <li
+        class="pagination-item"
+        :class="props.currentPage === 1 ? 'inactive opacity-80 cursor-not-allowed' : ''"
+      >
         <NuxtImg src="/img/chevron-left.svg" alt="chevron-left" width="16" />
       </li>
       <li v-for="page in rangePages" :key="page" class="pagination-item"
         :class="page === currentPage ? 'bg-[#443e40] border-[#443e40] !text-white' : ''" @click="onPageChange(page)">
         {{ page }}
       </li>
-      <li class="pagination-item">
+      <li
+        class="pagination-item"
+        :class="props.currentPage === Math.ceil(props.total / props.perPage) ? 'inactive opacity-80 cursor-not-allowed' : ''"
+      >
         <NuxtImg src="/img/chevron-right.svg" alt="chevron-right" width="16" />
       </li>
     </ul>
@@ -79,5 +74,9 @@ const totalPages = computed(() => Math.ceil(props.total / props.perPage));
   border-color: #f27002;
   cursor: pointer;
   color: #fff;
+}
+
+.pagination-item.inactive {
+  pointer-events: none;
 }
 </style>
