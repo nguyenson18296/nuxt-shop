@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { PhList } from '@phosphor-icons/vue';
 
-const { categories } = useCategoriesStore();
+const categoriesStore = useCategoriesStore();
+
+const { categories } = storeToRefs(categoriesStore);
 </script>
 
 <template>

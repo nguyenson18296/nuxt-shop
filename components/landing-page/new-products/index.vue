@@ -2,23 +2,12 @@
 import { SwiperSlide } from 'swiper/vue';
 import { useFetch } from 'nuxt/app';
 
-interface IProduct {
-  product_id: number;
-  product_title: string;
-  product_slug: string;
-  product_thumbnail: string;
-  product_in_stock: number;
-  product_price: string;
-  product_discount_price: string;
-  product_images: string[];
-}
-
 definePageMeta({
   layout: "landing-page-section"
 })
 
 const { data } = await useFetch<{
-  data: IProduct[];
+  data: IProductItem[];
 }>('/api/products/newest', {
   baseURL: 'http://localhost:1996',
   method: 'GET'
@@ -29,15 +18,15 @@ const products = data.value?.data || [];
 
 <template>
   <NuxtLayout name="landing-page-section" section-title="New Products" bg-section="#fff" bg-text="#fff" number-of-slides="5">
-    <swiper-slide v-for="product in products" :key="product.product_id">
+    <swiper-slide v-for="product in products" :key="product.id">
       <ProductFeature
-        :imgSrc="product.product_thumbnail" 
-        :title="product.product_title"
-        :slug="product.product_slug"
-        :productInStock="product.product_in_stock"
-        :price="product.product_price"
-        :discount-price="product.product_discount_price"
-        :second-img-src="product.product_images?.[0] ?? ''"
+        :imgSrc="product.thumbnail" 
+        :title="product.title"
+        :slug="product.slug"
+        :productInStock="product.in_stock"
+        :price="product.price"
+        :discount-price="product.discount_price"
+        :second-img-src="product.images?.[0] ?? ''"
       />
     </swiper-slide>
   </NuxtLayout>

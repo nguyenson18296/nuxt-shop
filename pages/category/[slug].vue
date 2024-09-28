@@ -12,35 +12,68 @@ interface ICategory {
 const route = useRoute();
 const slug = route.params.slug;
 
-const products = ref<IProductItem[]>([]);
+const pagination = ref({
+  perPage: 10,
+  currentPage: 1,
+});
+const products = ref<IListResponse<IProductItem>>({
+  data: [],
+  total: 0,
+  page: 1,
+  limit: 10,
+  success: false,
+});
+
 const category = ref<ICategory>({} as ICategory);
 
-await useFetch<{
-  data: ICategory;
-}>(`/api/categories/${slug}`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET',
-  onResponse: ({ response }) => {
-    if (!response.ok) {
-      return console.error('Failed to fetch category');
-    }
-    category.value = response._data.data;
-  }
+onMounted(() => {
+  Promise.all([
+    fetchCategories(),
+    fetchProductsByCategory()
+  ]);
 });
 
-await useFetch<{
-  data: IProductItem[];
-  success: boolean;
-}>(`/api/products/category/${slug}`, {
-  baseURL: 'http://localhost:1996',
-  method: 'GET',
-  onResponse: ({ response }) => {
-    if (!response.ok) {
-      return console.error('Failed to fetch products');
-    }
-    products.value = response._data.data;
+async function fetchCategories() {
+  const { data, execute } = await useFetch<{
+    data: ICategory;
+    success: boolean;
+  }>(`/api/categories/${slug}`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+    key: `category-${slug}`,
+  });
+
+  await execute();
+
+  if (data.value?.success) {
+    category.value = data.value.data;
   }
-});
+}
+
+async function fetchProductsByCategory() {
+  const { data, execute } = await useFetch<IListResponse<IProductItem>>(`/api/products/category/${slug}`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+    key: `products-${slug}`,
+  });
+
+  await execute();
+
+  if (data.value?.success) {
+    products.value = data.value;
+  }
+}
+
+const onPageChange = (page: number) => {
+  pagination.value.currentPage = page;
+  fetchProductsByCategory();
+};
+
+const textRange = usePaginationRange(
+  computed(() => pagination.value.currentPage),
+  computed(() => products.value.limit),
+  computed(() => products.value.total)
+);
 
 useSeoMeta({
   title: `Vue Shop - E-commerce - ${category.value.title} | Products`,
@@ -66,11 +99,35 @@ useSeoMeta({
           <p class="text-neutral-500 text-sm">{{ category.description }}</p>
         </div>
       </div>
+      <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
+        <div>
+          Sort By: Price
+        </div>
+        <div>
+          <Pagination
+            :total="products.total"
+            :perPage="products.limit"
+            :currentPage="products.page"
+            :onPageChange="onPageChange"
+          />
+        </div>
+      </div>
       <div class="product-grid grid grid-cols-4 gap-4">
-        <div v-for="product in products" :key="product.id">
+        <div v-for="product in products.data" :key="product.id">
           <ProductFeature :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug"
             :productInStock="product.in_stock" :price="product.price" :discount-price="product.discount_price"
             :second-img-src="product.images?.[0] ?? ''" />
+        </div>
+      </div>
+      <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
+        <div v-text="textRange" />
+        <div>
+          <Pagination
+            :total="products.total"
+            :perPage="products.limit"
+            :currentPage="products.page"
+            :onPageChange="onPageChange"
+          />
         </div>
       </div>
     </div>

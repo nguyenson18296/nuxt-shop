@@ -17,6 +17,10 @@ const pagination = ref({
   perPage: 10,
   currentPage: 1,
 });
+const selectedOption = ref<IOption>({
+  label: 'Newest Arrivals',
+  value: 'newest',
+});
 
 const products = ref<IListResponse<IProductItem>>({
   data: [],
@@ -31,14 +35,14 @@ onMounted(() => {
 });
 
 async function fetchProducts() {
-  const { data, execute } = useFetch<IListResponse<IProductItem>>(`/api/products`, {
+  const { data, execute } = useFetch<IListResponse<IProductItem>>(urlFetching, {
     baseURL: 'http://localhost:1996',
     method: 'GET',
-    params: {
-      limit: pagination.value.perPage,
-      page: pagination.value.currentPage,
-    },
-    key: `products-${pagination.value.currentPage}`,
+    // params: {
+    //   limit: pagination.value.perPage,
+    //   page: pagination.value.currentPage,
+    // },
+    key: urlFetching.value,
   });
 
   // Execute the fetch and await its completion
@@ -57,13 +61,65 @@ const onPageChange = (page: number) => {
   fetchProducts();
 };
 
-const ranges = computed(() => {
-  const start = (pagination.value.currentPage - 1) * pagination.value.perPage + 1;
-  const end = Math.min(pagination.value.currentPage * pagination.value.perPage, products.value.total);
+const textRange = usePaginationRange(
+  computed(() => pagination.value.currentPage),
+  computed(() => products.value.limit),
+  computed(() => products.value.total)
+);
 
-  return `Showing ${start} - ${end} of ${products.value.total} items`;
+const FILTER_OPTIONS = [
+  {
+    label: 'Newest Arrivals',
+    value: 'newest',
+  },
+  {
+    label: 'Best Sellers',
+    value: 'best_sellers', 
+  },
+  {
+    label: 'Price: Low to High',
+    value: 'price_low_to_high',
+  },
+  {
+    label: 'Price: High to Low',
+    value: 'price_high_to_low',
+  },
+  {
+    label: 'Product Name: A to Z',
+    value: 'product_name_a_to_z',
+  },
+  {
+    label: 'Product Name: Z to A',
+    value: 'product_name_z_to_a',
+  },
+]
+
+const onSelectFilter = (option: IOption) => {
+  selectedOption.value = option;
+}
+
+const urlFetching = computed(() => {
+  switch (selectedOption.value.value) {
+    case 'newest':
+      return `/api/products/newest?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}`;
+    case 'best_sellers':
+      return `/api/products/best-selling?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}`;
+    case 'price_low_to_high':
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}&sort=price_low_to_high`;
+    case 'price_high_to_low':
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}&sort=price_high_to_low`;
+    case 'product_name_a_to_z':
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}&sort=product_name_a_to_z`;
+    case 'product_name_z_to_a':
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}&sort=product_name_z_to_a`;
+    default:
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}`;
+  }
 });
 
+watch(urlFetching, () => {
+  fetchProducts();
+});
 </script>
 
 <template>
@@ -103,7 +159,11 @@ const ranges = computed(() => {
       </div>
       <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
         <div>
-          Sort By: Price
+          <Select
+            :options="FILTER_OPTIONS"
+            :selected-option="selectedOption"
+            @select="onSelectFilter"
+          />
         </div>
         <div>
           <Pagination
@@ -122,7 +182,7 @@ const ranges = computed(() => {
         </div>
       </div>
       <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
-        <div v-text="ranges" />
+        <div v-text="textRange" />
         <div>
           <Pagination
             :total="products.total"

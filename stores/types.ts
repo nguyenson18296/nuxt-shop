@@ -42,3 +42,8 @@ export interface IPost {
 
 export type FunctionArgs<Args extends any[] = any[], Return = void> = (...args: Args) => Return;
 export type MaybeRef<T> = T | Ref<T>;
+
+export interface IOption {
+  value: string;
+  label: string;
+}
