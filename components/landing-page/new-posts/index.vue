@@ -1,6 +1,5 @@
-<script lang="ts">
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Autoplay } from 'swiper/modules';
+<script setup lang="ts">
+import { SwiperSlide } from 'swiper/vue';
 
 interface IPost {
   id: number;
@@ -16,21 +15,32 @@ interface IPost {
 
 definePageMeta({
   layout: "landing-page-section"
-})
+});
 
-export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
-  template: 'landing-page-section',
-  async setup() {
-    const { data } = await useFetchBaseUrl<IPost>('/api/posts');
+const posts = ref<IPost[]>([]);
 
-    return {
-      modules: [Autoplay],
-      posts: data.value?.data || [],
-    }
+onMounted(async () => {
+  await fetchPosts();
+});
+
+async function fetchPosts() {
+  const { data, execute, status } = useFetch<{
+    data: IPost[];
+    success: boolean;
+  }>(`/api/posts`, {
+    baseURL: 'http://localhost:1996',
+    method: 'GET',
+    key: 'posts',
+  });
+
+  // Execute the fetch and await its completion
+  await execute();
+
+  if (data.value?.success) {
+    posts.value = data.value.data;
+  } else {
+    // Handle errors or unsuccessful fetch
+    console.error('Failed to fetch reviews: ', status);
   }
 }
 </script>
@@ -42,6 +52,25 @@ export default {
     bg-section="#fff"
     bg-text="#fff"
     number-of-slides="4"
+    class-names="!pt-0"
+    :breakpoints="{
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20,
+      },
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+      1280: {
+        slidesPerView: 4,
+        spaceBetween: 30,
+      },
+    }"
   >
     <swiper-slide v-for="post in posts" :key="post.id">
       <PostCarousel :img-src="post.cover_photo" :title="post.title" :slug="post.slug"

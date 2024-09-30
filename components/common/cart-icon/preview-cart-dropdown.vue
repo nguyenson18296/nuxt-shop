@@ -60,12 +60,4 @@ defineProps({
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
-
-.button-primary:hover {
-  background-color: #f27002;
-}
-
-.button-action:hover {
-  background-color: #443e40;
-}
 </style>

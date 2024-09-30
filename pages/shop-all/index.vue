@@ -8,6 +8,14 @@ useServerSeoMeta({
   description: `Vue Shop - E-commerce - Shop All`,
   ogDescription: `Vue Shop - E-commerce - Shop All`,
 })
+const productStore = useProductStore();
+
+const { queryParams } = storeToRefs(productStore);
+
+watch(queryParams, (value) => {
+  console.log('queryParams', value);
+  fetchProducts();
+});
 
 const spliceCategories = computed(() => {
   return categories.value.slice(0, 5);
@@ -18,8 +26,8 @@ const pagination = ref({
   currentPage: 1,
 });
 const selectedOption = ref<IOption>({
-  label: 'Newest Arrivals',
-  value: 'newest',
+  label: 'Featured Item',
+  value: 'featured_items',
 });
 
 const products = ref<IListResponse<IProductItem>>({
@@ -38,10 +46,9 @@ async function fetchProducts() {
   const { data, execute } = useFetch<IListResponse<IProductItem>>(urlFetching, {
     baseURL: 'http://localhost:1996',
     method: 'GET',
-    // params: {
-    //   limit: pagination.value.perPage,
-    //   page: pagination.value.currentPage,
-    // },
+    params: {
+      ...queryParams.value,
+    },
     key: urlFetching.value,
   });
 
@@ -68,13 +75,17 @@ const textRange = usePaginationRange(
 );
 
 const FILTER_OPTIONS = [
+{
+    label: 'Featured Items',
+    value: 'featured_items',
+  },
   {
     label: 'Newest Arrivals',
     value: 'newest',
   },
   {
     label: 'Best Sellers',
-    value: 'best_sellers', 
+    value: 'best_sellers',
   },
   {
     label: 'Price: Low to High',
@@ -100,6 +111,8 @@ const onSelectFilter = (option: IOption) => {
 
 const urlFetching = computed(() => {
   switch (selectedOption.value.value) {
+    case 'featured_items':
+      return `/api/products?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}`;
     case 'newest':
       return `/api/products/newest?limit=${pagination.value.perPage}&page=${pagination.value.currentPage}`;
     case 'best_sellers':
@@ -125,73 +138,70 @@ watch(urlFetching, () => {
 <template>
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs title="Shop All" />
-    <div class="container">
-      <div class="category-content mb-[30px] flex items-start gap-4">
-        <div class="flex-[0_0_15%]">
-          <NuxtImg
-            src="https://cdn11.bigcommerce.com/s-gl0yzafqud/images/stencil/original/f/category-img-06__05690.original.jpg"
-            alt="shop-all-img" class="border border-neutral-200 p-[5px] rounded-lg border-solid" width="185"
-            height="185" />
+    <NuxtLayout name="product-page-wrapper">
+      <template #products-page-content>
+        <div class="category-content mb-[30px] flex items-start gap-4">
+          <div class="flex-[0_0_15%]">
+            <NuxtImg
+              src="https://cdn11.bigcommerce.com/s-gl0yzafqud/images/stencil/original/f/category-img-06__05690.original.jpg"
+              alt="shop-all-img" class="border border-neutral-200 p-[5px] rounded-lg border-solid" width="185"
+              height="185" />
+          </div>
+          <div>
+            <h1 class="text-[#333] font-bold text-base leading-[26px] capitalize mt-0 mb-2.5 mx-0">
+              Shop All
+            </h1>
+            <p class="text-neutral-500 text-sm">
+              Phasellus consectetur rutrum feugiat. Proin id semper urna. Maecenas eget felis augue. Integer purus nibh,
+              congue eu porttitor quis, accumsan nec mauris. Vivamus sit amet mi ac leo vehicula ultrices et a est.
+              Proin
+              rhoncus facilisis risus, nec commodo elit. Aenean ac nisi nisl.
+            </p>
+            <ul class="flex mt-[10px] items-start gap-4">
+              <li v-for="category in spliceCategories" :key="category.id"
+                class="flex flex-col justify-center items-center w-[105px]">
+                <div class="img mb-[10px]">
+                  <NuxtLink :to="`/category/${category.slug}`">
+                    <NuxtImg :src="category.thumbnail" :alt="category.title" with="93" height="93"
+                      class="border border-neutral-200 p-[5px] rounded-lg border-solid w-[93px] h-[93px]" />
+                  </NuxtLink>
+                </div>
+                <NuxtLink :to="`/category/${category.slug}`" class="font-normal text-[13px] text-[#666] leading-[22px]">
+                  {{
+                category.title }}</NuxtLink>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h1 class="text-[#333] font-bold text-base leading-[26px] capitalize mt-0 mb-2.5 mx-0">
-            Shop All
-          </h1>
-          <p class="text-neutral-500 text-sm">
-            Phasellus consectetur rutrum feugiat. Proin id semper urna. Maecenas eget felis augue. Integer purus nibh,
-            congue eu porttitor quis, accumsan nec mauris. Vivamus sit amet mi ac leo vehicula ultrices et a est. Proin
-            rhoncus facilisis risus, nec commodo elit. Aenean ac nisi nisl.
-          </p>
-          <ul class="flex mt-[10px] items-start gap-4">
-            <li v-for="category in spliceCategories" :key="category.id"
-              class="flex flex-col justify-center items-center w-[105px]">
-              <div class="img mb-[10px]">
-                <NuxtLink :to="`/category/${category.slug}`">
-                  <NuxtImg :src="category.thumbnail" :alt="category.title" with="93" height="93"
-                    class="border border-neutral-200 p-[5px] rounded-lg border-solid w-[93px] h-[93px]" />
-                </NuxtLink>
-              </div>
-              <NuxtLink :to="`/category/${category.slug}`" class="font-normal text-[13px] text-[#666] leading-[22px]">{{
-              category.title }}</NuxtLink>
-            </li>
-          </ul>
+        <div
+          class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
+          <div>
+            <Select :options="FILTER_OPTIONS" :selected-option="selectedOption" @select="onSelectFilter" />
+          </div>
+          <div>
+            <Pagination :total="products.total" :perPage="products.limit" :currentPage="products.page"
+              :onPageChange="onPageChange" />
+          </div>
         </div>
-      </div>
-      <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
-        <div>
-          <Select
-            :options="FILTER_OPTIONS"
-            :selected-option="selectedOption"
-            @select="onSelectFilter"
-          />
+        <div class="product-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-10" v-if="products.data.length > 0">
+          <div v-for="product in products.data" :key="product.id">
+            <ProductFeature :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug"
+              :productInStock="product.in_stock" :price="product.price" :discount-price="product.discount_price"
+              :second-img-src="product.images?.[0] ?? ''" />
+          </div>
         </div>
-        <div>
-          <Pagination
-            :total="products.total"
-            :perPage="products.limit"
-            :currentPage="products.page"
-            :onPageChange="onPageChange"
-          />
+        <div class="min-h-[300px] flex items-center justify-center" v-else>
+          <p class="text-[#666] text-lg">No products found</p>
         </div>
-      </div>
-      <div class="product-grid grid grid-cols-5 gap-4">
-        <div v-for="product in products.data" :key="product.id">
-          <ProductFeature :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug"
-            :productInStock="product.in_stock" :price="product.price" :discount-price="product.discount_price"
-            :second-img-src="product.images?.[0] ?? ''" />
+        <div
+          class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
+          <div v-text="textRange" />
+          <div>
+            <Pagination :total="products.total" :perPage="products.limit" :currentPage="products.page"
+              :onPageChange="onPageChange" />
+          </div>
         </div>
-      </div>
-      <div class="w-full flex items-center justify-between border border-neutral-200 mt-0 mb-[15px] mx-0 p-[15px] rounded-lg border-solid">
-        <div v-text="textRange" />
-        <div>
-          <Pagination
-            :total="products.total"
-            :perPage="products.limit"
-            :currentPage="products.page"
-            :onPageChange="onPageChange"
-          />
-        </div>
-      </div>
-    </div>
+      </template>
+    </NuxtLayout>
   </NuxtLayout>
 </template>

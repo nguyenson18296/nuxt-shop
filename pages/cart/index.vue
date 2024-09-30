@@ -94,17 +94,25 @@ const toggleCouponInputForm = () => {
 }
 
 const onRemoveCartItem = async () => {
-  const { data } = await useFetch<{
+  await useFetch<{
     success: boolean;
   }>(`/api/cart/cart-item/${selectedCartItemId.value}`, {
     baseURL: 'http://localhost:1996',
     method: 'POST',
-  })
-  if (data.value?.success) {
-    if (selectedCartItemId.value) {
-      removeProductFromCart(selectedCartItemId.value);
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+    onResponse: async ({ response }) => {
+      if (response.ok) {
+        if (selectedCartItemId.value) {
+          removeProductFromCart(selectedCartItemId.value);
+        }
+      }
+    },
+    onResponseError: () => {
+      toast('Error when deleting cart item, please try again!', 5000);
     }
-  }
+  })
 };
 
 const onCheckValidCoupon = async () => {

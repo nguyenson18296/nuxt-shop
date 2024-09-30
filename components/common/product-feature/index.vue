@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PhShoppingCart } from "@phosphor-icons/vue";
+import { PhShoppingCart, PhHeart, PhArrowsCounterClockwise, PhEye } from "@phosphor-icons/vue";
 
 const props = defineProps({
   imgSrc: String,
@@ -15,7 +15,7 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
 </script>
 
 <template>
-  <div class="py-0 px-[15px] h-[420px]">
+  <div class="py-0 px-[15px] h-[470px]">
     <div class="card mt-[1.07143rem] mx-0 my-2.5 w-full bg-white transition-all duration-[0.4s] ease-[ease-in-out] relative">
       <div class="wdgimg-bg" />
       <figure class="card-figure relative bg-white">
@@ -37,14 +37,14 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
           <NuxtImg
             :src="imgSrc"
             :alt="title"
-            class="min-h-[190px] max-h-[270px] image-1 w-full max-h-full object-contain m-auto"
+            class="min-h-[222px] max-h-[222px] image-1 w-full max-h-full object-contain m-auto"
             :class="{ hoverable: secondImgSrc }"
           />
           <NuxtImg
-            v-if="secondImgSrc"
+            v-show="secondImgSrc"
             :src="secondImgSrc"
             :alt="title"
-            class="card-img-container image-2 wdg-thumb min-h-[190px] max-h-[200px] w-full max-h-full object-contain m-auto"
+            class="card-img-container image-2 wdg-thumb min-h-[222px] max-h-[222px] w-full max-h-full object-contain m-auto"
           />
           <div v-if="productInStock === 0" class="sold-out text-center absolute h-20 w-20 leading-[70px] z-[1] opacity-90 text-white text-[13px] m-auto p-[5px] rounded-[50%] inset-0 bg-[#443e40]">
             Sold out
@@ -53,11 +53,7 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
         <!-- </a> -->
       </figure>
       <div class="card-body mt-4">
-          <div class="relative">
-            <span class="font-semibold pl-[15px] text-base leading-[18px] text-[#443e40]">
-              {{ discountPrice }}
-            </span>
-            <div class="cart-btn absolute top-[-6px] right-[15px] left-[15px]">
+        <div class="cart-btn top-[-6px] right-[15px] left-[15px]">
               <a class="card-figcaption-button ml-auto mr-0 flex items-center justify-center h-9 leading-9 text-[13px] w-9 text-white bg-[#443e40] overflow-hidden transition-all duration-[0.4s] ease-[ease-in-out] font-semibold z-[1] relative mx-auto my-0 p-0 rounded-[25px] border-[none] border-transparent cursor-pointer">
                 <PhShoppingCart size="24" class="shopping-cart-icon" />
                 <span class="add-to-cart-btn">
@@ -65,6 +61,13 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
                 </span>
               </a>
             </div>
+          <div class="relative">
+            <product-price
+              :price="+(price ?? 0)"
+              :discount_price="+(discountPrice ?? 0)"
+              class-names="pl-[15px] text-sm leading-[18px] text-[#443e40]"
+              font-size="text-sm"
+            />
             <div class="px-[15px] mt-1 italic text-[13px]">
               Available in stock: {{ productInStock }}
             </div>
@@ -74,6 +77,11 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
                   :style="{ width: `${percentage}%`  }"></div>
               </div>
             </div>
+            <figcaption class="card-figcaption mt-4 flex items-center justify-center gap-2">
+              <PhHeart title="Add to wishlist" :size="24" color="#888" class="cursor-pointer" />
+              <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="cursor-pointer" />
+              <PhEye title="Quick view" :size="24" color="#888" class="cursor-pointer" />
+            </figcaption>
           </div>
         </div>
     </div>
@@ -102,7 +110,6 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
     left: 0;
     right: 0;
     top: 0;
-    margin-bottom: 0;
     -webkit-opacity: 0;
     -moz-opacity: 0;
     -khtml-opacity: 0;
@@ -110,7 +117,6 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
     transform: scale(.98);
     transition: all .3s ease 0s;
     z-index: -1;
-    margin-bottom: -45px;
     visibility: hidden;
 }
 
@@ -135,6 +141,11 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
 
 .card:hover .card-img-container .wdg-thumb {
   opacity: 1;
+}
+
+.card:hover .card-figcaption {
+  opacity: 1;
+  transition: all .4s ease-in-out;
 }
 
 .swiper-slide img {
@@ -172,5 +183,14 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
   -khtml-opacity: 1;
   -webkit-opacity: 1;
   bottom: 0;
+}
+
+.card-figcaption {
+  padding: 3px 0 0 0;
+  opacity: 0;
+  transition: all .4s ease-in-out;
+  height: 46px;
+  border-top: 1px solid #e5e5e5;
+  pointer-events: none;
 }
 </style>
