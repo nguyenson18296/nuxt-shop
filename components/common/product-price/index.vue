@@ -31,13 +31,17 @@ defineProps({
       >
         {{ convertToCurrency(discount_price ?? 0) }}
       </span>
-      <span class="text-sm font-bold text-gray-500 dark:text-gray-400"
-        :class="{ 'text-[#f27002] line-through': discount_price }">
+      <span class="font-bold text-gray-500 dark:text-gray-400"
+        :class="[
+          fontSize,
+          { 'text-[#f27002] line-through': discount_price }
+        ]"
+      >
         {{ convertToCurrency(price) }}
       </span>
     </template>
     <template v-else>
-      <span class="text-sm font-bold text-gray-500 dark:text-gray-400">
+      <span class="font-bold text-gray-500 dark:text-gray-400">
         {{ convertToCurrency(price) }}
       </span>
     </template>

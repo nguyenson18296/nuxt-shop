@@ -43,7 +43,7 @@ watch(quantity, (newValue) => {
   </div>
 </template>
 
-<style scoped>
+<style>
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

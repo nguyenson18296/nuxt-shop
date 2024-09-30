@@ -19,6 +19,21 @@ body {
   position: relative;
 }
 
+.button-primary:hover {
+  background-color: #f27002;
+}
+
+.button-action:hover {
+  background-color: #443e40;
+}
+
+@media (min-width: 1680px) {
+  .container {
+      width: 1680px;
+      max-width: 1680px;
+  }
+}
+
 @media (min-width: 1260px) and (max-width: 1499px) {
   .container {
       width: 1230px;

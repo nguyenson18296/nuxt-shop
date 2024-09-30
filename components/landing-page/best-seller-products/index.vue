@@ -2,14 +2,14 @@
 import { SwiperSlide } from 'swiper/vue';
 
 interface IProduct {
-  product_id: number;
-  product_title: string;
-  product_slug: string;
-  product_thumbnail: string;
-  product_price: string;
-  product_discount_price: string;
-  product_in_stock: number;
-  product_images: string[];
+  id: number;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  price: string;
+  discount_price: string;
+  in_stock: number;
+  images: string[];
 }
 
 definePageMeta({
@@ -24,12 +24,25 @@ const products = data.value?.data || [];
 </script>
 
 <template>
-  <NuxtLayout name="landing-page-section" section-title="Best Sellers" bg-section="#f7f7f7" bg-text="#f5f5f5">
-    <swiper-slide v-for="product in products" :key="product.product_id">
-      <ProductCarousel :imgSrc="product.product_thumbnail" :title="product.product_title"
-        :slug="product.product_slug" :price="product.product_price" :discount-price="product.product_discount_price" :product-in-stock="product.product_in_stock"
-        :product-images="product.product_images"
-        />
+  <NuxtLayout name="landing-page-section" section-title="Best Sellers" bg-section="#f7f7f7" bg-text="#f5f5f5"
+    :breakpoints="{
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+    }">
+    <swiper-slide v-for="product in products" :key="product.id" class="mb-[30px]">
+      <ProductCarousel :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug" :price="product.price"
+        :discount-price="product.discount_price" :product-in-stock="product.in_stock"
+        :product-images="product.images" />
     </swiper-slide>
   </NuxtLayout>
 </template>

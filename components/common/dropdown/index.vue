@@ -39,7 +39,7 @@ defineExpose({
     </button>
     <transition name="p-connected-overlay">
     <div v-on-click-outside="closeDropdown" v-if="isOpenDropdown" id="dropdown"
-      class="absolute w-full top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+      class="absolute w-full min-w-max top-10 right-0 z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
       :class="contentClassNames">
         <slot name="dropdown-content" />
     </div>
