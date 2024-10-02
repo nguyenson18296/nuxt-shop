@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { PhCaretDown, PhMagnifyingGlass, PhPhone, PhHeart, PhUser, PhUserCheck, PhSignOut } from "@phosphor-icons/vue";
+import { PhCaretDown, PhPhone, PhHeart, PhUser, PhUserCheck, PhSignOut, PhArrowsClockwise } from "@phosphor-icons/vue";
 import { useAuthStore, type UserInterface } from '@/stores/auth';
 
 const { user, authenticated } = storeToRefs(useAuthStore());
+const { compareProducts } = storeToRefs(useProductStore());
 const { setUser } = useAuthStore();
 const token = useCookie('token')
 
@@ -21,6 +22,8 @@ const getMe = async () => {
     setUser(data.value.data)
   }
 }
+
+const comparedProductLength = computed(() => compareProducts.value?.length ?? 0);
 
 getMe();
 </script>
@@ -44,6 +47,15 @@ getMe();
         </div>
         <div class="ml-4 nav-user flex items-center gap-4">
           <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+          <NuxtLink to="/compare">
+            <div class="relative">
+              <PhArrowsClockwise :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
+              <div
+                class="product-length absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-[#f27002] border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                {{ comparedProductLength }}
+              </div>
+            </div>
+          </NuxtLink>
           <Dropdown
             dropdownButtonId="user-dropdown"
           >

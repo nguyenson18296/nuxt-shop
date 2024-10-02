@@ -7,6 +7,7 @@ interface IProduct {
   title: string;
   slug: string;
   thumbnail: string;
+  short_description: string;
   images: string[];
   in_stock: number;
   price: string;
@@ -52,9 +53,10 @@ const products = data.value?.data || [];
       },
     }">
     <swiper-slide v-for="product in products" :key="product.id">
-      <ProductFeature :id="product.id" :images="product.images" :img-src="product.thumbnail" :second-img-src="product.images?.[0] ?? ''" :title="product.title"
-        :slug="product.slug" :product-in-stock="product.in_stock" :price="product.price"
-        :discount-price="product.discount_price" />
+      <ProductFeature :id="product.id" :images="product.images" :img-src="product.thumbnail"
+        :second-img-src="product.images?.[0] ?? ''" :title="product.title" :slug="product.slug"
+        :product-in-stock="product.in_stock" :price="product.price" :discount-price="product.discount_price"
+        :description="product.short_description" />
     </swiper-slide>
   </NuxtLayout>
 </template>

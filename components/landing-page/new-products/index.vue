@@ -48,6 +48,7 @@ const products = data.value?.data || [];
   >
     <swiper-slide v-for="product in products" :key="product.id">
       <ProductFeature
+        :id="product.id"
         :imgSrc="product.thumbnail" 
         :title="product.title"
         :slug="product.slug"

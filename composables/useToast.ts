@@ -1,6 +1,7 @@
 import { ref } from "vue";
 
 interface IToast {
+  type?: "success" | "error";
   id: string;
   message: string;
   duration: number;
@@ -9,9 +10,15 @@ interface IToast {
 const toastList = ref<IToast[]>([]);
 
 export const useToast = () => {
-  function addToast(message: string, duration: number) {
-    const id = Math.random().toString(36).substr(2, 9);
-    toastList.value.push({ id, message, duration });
+  const toastType = ref<"success" | "error">("success");
+  function addToast(
+    message: string,
+    duration: number,
+    type: "success" | "error" = "success"
+  ) {
+    const id = crypto.randomUUID();
+    toastType.value = type;
+    toastList.value.push({ type: toastType.value, id, message, duration });
 
     setTimeout(() => {
       toastList.value = toastList.value.filter((toast) => toast.id !== id);
@@ -20,6 +27,7 @@ export const useToast = () => {
 
   function removeToast(id: string) {
     toastList.value = toastList.value.filter((toast) => toast.id !== id);
+    toastType.value = "success";
   }
 
   return { toastList, addToast, removeToast };

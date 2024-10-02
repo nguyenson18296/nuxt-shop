@@ -32,20 +32,15 @@ watch([() => props.total, () => props.perPage], ([total, perPage], [oldTotal, ol
 <template>
   <div class="pagination">
     <ul class="pagination-list flex gap-2">
-      <li
-        class="pagination-item"
-        :class="props.currentPage === 1 ? 'inactive opacity-80 cursor-not-allowed' : ''"
-      >
+      <li class="pagination-item" :class="props.currentPage === 1 ? 'inactive opacity-80 cursor-not-allowed' : ''">
         <NuxtImg src="/img/chevron-left.svg" alt="chevron-left" width="16" />
       </li>
       <li v-for="page in rangePages" :key="page" class="pagination-item"
         :class="page === currentPage ? 'bg-[#443e40] border-[#443e40] !text-white' : ''" @click="onPageChange(page)">
         {{ page }}
       </li>
-      <li
-        class="pagination-item"
-        :class="props.currentPage === Math.ceil(props.total / props.perPage) ? 'inactive opacity-80 cursor-not-allowed' : ''"
-      >
+      <li class="pagination-item"
+        :class="props.currentPage === Math.ceil(props.total / props.perPage) ? 'inactive opacity-80 cursor-not-allowed' : ''">
         <NuxtImg src="/img/chevron-right.svg" alt="chevron-right" width="16" />
       </li>
     </ul>
