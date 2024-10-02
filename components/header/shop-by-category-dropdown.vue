@@ -35,6 +35,14 @@ const { categories } = storeToRefs(categoriesStore);
             {{ category.title }}
           </NuxtLink>
         </li>
+        <li class="cursor-pointer">
+          <NuxtLink
+            class="w-full text-white block font-normal text-sm leading-[31px] relative text-left capitalize px-5 py-2.5"
+            href="/shop-all"
+          >
+            Shop all
+          </NuxtLink>
+        </li>
       </ul>
     </template>
   </Dropdown>

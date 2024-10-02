@@ -26,7 +26,7 @@ const onImageChange = (image: string) => {
     </figure>
     <ul class="flex items-center gap-4 mt-5">
       <li v-for="image in images" :key="image"
-        class="flex justify-center border border-neutral-200 w-full overflow-hidden rounded-lg border-solid"
+        class="flex justify-center border border-neutral-200 w-full max-w-[150px] overflow-hidden rounded-lg border-solid"
         :style="{ borderColor: image === mainImage ? '#777' : '#f3f4f6' }" @click="onImageChange(image)">
         <NuxtImg :src="image" alt="Product image" class="h-[120px] w-[95px]" />
       </li>
