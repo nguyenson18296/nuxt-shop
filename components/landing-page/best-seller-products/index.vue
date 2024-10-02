@@ -40,8 +40,8 @@ const products = data.value?.data || [];
       },
     }">
     <swiper-slide v-for="product in products" :key="product.id" class="mb-[30px]">
-      <ProductCarousel :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug" :price="product.price"
-        :discount-price="product.discount_price" :product-in-stock="product.in_stock"
+      <ProductCarousel :id="product.id" :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug"
+        :price="product.price" :discount-price="product.discount_price" :product-in-stock="product.in_stock"
         :product-images="product.images" />
     </swiper-slide>
   </NuxtLayout>

@@ -185,9 +185,15 @@ watch(urlFetching, () => {
         </div>
         <div class="product-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-10" v-if="products.data.length > 0">
           <div v-for="product in products.data" :key="product.id">
-            <ProductFeature :imgSrc="product.thumbnail" :title="product.title" :slug="product.slug"
+            <ProductFeature 
+              :id="product.id" 
+              imgSrc="product.thumbnail" 
+              :title="product.title"
+              :slug="product.slug"
               :productInStock="product.in_stock" :price="product.price" :discount-price="product.discount_price"
-              :second-img-src="product.images?.[0] ?? ''" />
+              :second-img-src="product.images?.[0] ?? ''"
+              :images="product.images"
+            />
           </div>
         </div>
         <div class="min-h-[300px] flex items-center justify-center" v-else>

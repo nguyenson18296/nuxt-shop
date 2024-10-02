@@ -22,7 +22,7 @@ export default {
     const categories = ref<ICategory[]>(data.value || []);
 
     return {
-      modules: [Autoplay],
+      modules: [],
       categories: categories.value,
     }
   }

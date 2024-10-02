@@ -4,24 +4,63 @@ import { Navigation } from 'swiper/modules';
 import { PhShoppingCart, PhHeart, PhArrowsCounterClockwise, PhEye } from "@phosphor-icons/vue";
 
 const props = defineProps({
-  imgSrc: String,
-  title: String,
-  slug: String,
-  price: String,
-  discountPrice: String,
-  productInStock: Number,
-  productImages: Array<string>,
+  id: {
+    type: Number,
+    required: true,
+  },
+  imgSrc: {
+    type: String,
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: String,
+    required: true,
+  },
+  discountPrice: {
+    type: String,
+    required: false,
+  },
+  productInStock: {
+    type: Number,
+    required: true,
+  },
+  productImages: {
+    type: Array<string>,
+    required: false,
+  },
 });
 const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.productInStock ?? 0;
 const modules = [Navigation];
+
+const isOpenProductModal = ref(false);
+
+const openProductModal = () => {
+  console.log('openProductModal');
+  isOpenProductModal.value = true;
+};
+
+const closeDropdown = () => {
+  console.log('closeDropdown');
+  isOpenProductModal.value = false;
+};
 </script>
 
 <template>
+  <Teleport to="body">
+    <product-main-info-modal :is-open="isOpenProductModal" :thumbnail="imgSrc ?? ''" :images="productImages"
+      :title="title" :price="+price" :discount_price="+(discountPrice ?? 0)" :in_stock="productInStock" :id="id" />
+  </Teleport>
   <div class="px-[15px] h-[550px] py-0 block">
     <div class="mt-[1.07143rem] mx-0 my-2.5">
-      <div
-        class="card relative w-full transition-all duration-[0.4s] ease-[ease-in-out] p-0 bg-[#fff]"
-      >
+      <div class="card relative w-full transition-all duration-[0.4s] ease-[ease-in-out] p-0 bg-[#fff]">
         <div class="wdgimg-bg" />
         <figure class="card-figure relative transition-all duration-[0.4s] pb-5">
           <div class="title-brand px-[15px] py-2.5">
@@ -71,9 +110,10 @@ const modules = [Navigation];
               </div>
             </div>
             <figcaption class="card-figcaption mt-4 flex items-center justify-center gap-2">
-              <PhHeart title="Add to wishlist" :size="24" color="#888" class="cursor-pointer" />
-              <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="cursor-pointer" />
-              <PhEye title="Quick view" :size="24" color="#888" class="cursor-pointer" />
+              <PhHeart title="Add to wishlist" :size="24" color="#888" class="icon-action cursor-pointer" />
+              <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="icon-action cursor-pointer" />
+              <PhEye @click="openProductModal" title="Quick view" :size="24" color="#888"
+                class="icon-action cursor-pointer" />
             </figcaption>
           </div>
         </div>
@@ -119,15 +159,15 @@ const modules = [Navigation];
   -khtml-opacity: 1;
   opacity: 1;
   transform: scale(1);
-  transition: opacity .3s ease 0s,visibility 0s ease 0s,transform .3s ease 0s;
+  transition: opacity .3s ease 0s, visibility 0s ease 0s, transform .3s ease 0s;
   visibility: visible;
 }
 
 .card .wdgimg-bg {
   background: #fff;
-  -ms-box-shadow: 0 0 10px rgba(0,0,0,.15);
-  -o-box-shadow: 0 0 10px rgba(0,0,0,.15);
-  box-shadow: 0 0 10px rgba(0,0,0,.15);
+  -ms-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  -o-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .15);
   position: absolute;
   border-radius: 8px;
   bottom: 0;
@@ -153,6 +193,7 @@ const modules = [Navigation];
 .card:hover .card-figcaption {
   opacity: 1;
   transition: all .4s ease-in-out;
+  pointer-events: all;
 }
 
 .add-to-cart-btn {
@@ -193,5 +234,9 @@ const modules = [Navigation];
   height: 46px;
   border-top: 1px solid #e5e5e5;
   pointer-events: none;
+}
+
+.icon-action:hover {
+  fill: #000;
 }
 </style>

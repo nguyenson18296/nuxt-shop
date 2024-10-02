@@ -2,21 +2,63 @@
 import { PhShoppingCart, PhHeart, PhArrowsCounterClockwise, PhEye } from "@phosphor-icons/vue";
 
 const props = defineProps({
-  imgSrc: String,
+  id: {
+    type: Number,
+    required: true,
+  },
+  imgSrc: {
+    type: String,
+    required: true,
+  },
   secondImgSrc: String,
-  title: String,
-  slug: String,
-  price: String,
-  discountPrice: String,
-  productInStock: Number,
+  images: {
+    type: Array<string>,
+    required: false,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: String,
+    required: true,
+  },
+  discountPrice: {
+    type: String,
+    required: false,
+  },
+  productInStock: {
+    type: Number,
+    required: true,
+  },
 });
 const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.productInStock ?? 0;
+
+const isOpenProductModal = ref(false);
+
+const openProductModal = () => {
+  isOpenProductModal.value = true;
+};
+
+const closeDropdown = () => {
+  isOpenProductModal.value = false;
+};
 
 </script>
 
 <template>
-  <div class="py-0 px-[15px] h-[470px]">
-    <div class="card mt-[1.07143rem] mx-0 my-2.5 w-full bg-white transition-all duration-[0.4s] ease-[ease-in-out] relative">
+  <Teleport to="body">
+    <product-main-info-modal :is-open="isOpenProductModal" :thumbnail="imgSrc ?? ''" :images="images" :title="title"
+      :price="+price" :discount_price="+(discountPrice ?? 0)" :in_stock="productInStock" :id="id"
+      @update:isOpen="closeDropdown" />
+  </Teleport>
+  <div class="py-0 px-[15px] h-[510px]">
+    <div
+      class="card mt-[1.07143rem] mx-0 my-2.5 w-full bg-white transition-all duration-[0.4s] ease-[ease-in-out] relative">
       <div class="wdgimg-bg" />
       <figure class="card-figure relative bg-white">
         <div class="title-brand px-[15px] py-2.5">
@@ -24,29 +66,20 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
             Premium Quality
           </p>
           <h4 class="card-title text-sm text-ellipsis h-[60px] whitespace-pre-wrap overflow-hidden font-semibold">
-            <NuxtLink
-              class="text-[#443e40] hover:text-[#fbb03b]"
-              :href="`/products/${slug}`"
-            >
+            <NuxtLink class="text-[#443e40] hover:text-[#fbb03b]" :href="`/products/${slug}`">
               {{ title }}
             </NuxtLink>
           </h4>
         </div>
         <!-- <a> -->
         <div class="card-img-container relative max-w-full w-full">
-          <NuxtImg
-            :src="imgSrc"
-            :alt="title"
+          <NuxtImg :src="imgSrc" :alt="title"
             class="min-h-[222px] max-h-[222px] image-1 w-full max-h-full object-contain m-auto"
-            :class="{ hoverable: secondImgSrc }"
-          />
-          <NuxtImg
-            v-show="secondImgSrc"
-            :src="secondImgSrc"
-            :alt="title"
-            class="card-img-container image-2 wdg-thumb min-h-[222px] max-h-[222px] w-full max-h-full object-contain m-auto"
-          />
-          <div v-if="productInStock === 0" class="sold-out text-center absolute h-20 w-20 leading-[70px] z-[1] opacity-90 text-white text-[13px] m-auto p-[5px] rounded-[50%] inset-0 bg-[#443e40]">
+            :class="{ hoverable: secondImgSrc }" />
+          <NuxtImg v-show="secondImgSrc" :src="secondImgSrc" :alt="title"
+            class="card-img-container image-2 wdg-thumb min-h-[222px] max-h-[222px] w-full max-h-full object-contain m-auto" />
+          <div v-if="productInStock === 0"
+            class="sold-out text-center absolute h-20 w-20 leading-[70px] z-[1] opacity-90 text-white text-[13px] m-auto p-[5px] rounded-[50%] inset-0 bg-[#443e40]">
             Sold out
           </div>
         </div>
@@ -54,36 +87,33 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
       </figure>
       <div class="card-body mt-4">
         <div class="cart-btn top-[-6px] right-[15px] left-[15px]">
-              <a class="card-figcaption-button ml-auto mr-0 flex items-center justify-center h-9 leading-9 text-[13px] w-9 text-white bg-[#443e40] overflow-hidden transition-all duration-[0.4s] ease-[ease-in-out] font-semibold z-[1] relative mx-auto my-0 p-0 rounded-[25px] border-[none] border-transparent cursor-pointer">
-                <PhShoppingCart size="24" class="shopping-cart-icon" />
-                <span class="add-to-cart-btn">
-                  Add to Cart
-                </span>
-              </a>
-            </div>
-          <div class="relative">
-            <product-price
-              :price="+(price ?? 0)"
-              :discount_price="+(discountPrice ?? 0)"
-              class-names="pl-[15px] text-sm leading-[18px] text-[#443e40]"
-              font-size="text-sm"
-            />
-            <div class="px-[15px] mt-1 italic text-[13px]">
-              Available in stock: {{ productInStock }}
-            </div>
-            <div class="px-[15px]">
-              <div class="progress h-2.5 w-full mt-[5px] mb-0 mx-0 rounded-[25px] bg-[#f5f5f5]">
-                <div class="progress-bar h-2.5 rounded-[25px] bg-[#fed700]" 
-                  :style="{ width: `${percentage}%`  }"></div>
-              </div>
-            </div>
-            <figcaption class="card-figcaption mt-4 flex items-center justify-center gap-2">
-              <PhHeart title="Add to wishlist" :size="24" color="#888" class="cursor-pointer" />
-              <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="cursor-pointer" />
-              <PhEye title="Quick view" :size="24" color="#888" class="cursor-pointer" />
-            </figcaption>
-          </div>
+          <a
+            class="card-figcaption-button ml-auto mr-0 flex items-center justify-center h-9 leading-9 text-[13px] w-9 text-white bg-[#443e40] overflow-hidden transition-all duration-[0.4s] ease-[ease-in-out] font-semibold z-[1] relative mx-auto my-0 p-0 rounded-[25px] border-[none] border-transparent cursor-pointer">
+            <PhShoppingCart size="24" class="shopping-cart-icon" />
+            <span class="add-to-cart-btn">
+              Add to Cart
+            </span>
+          </a>
         </div>
+        <div class="relative">
+          <product-price :price="+(price ?? 0)" :discount_price="+(discountPrice ?? 0)"
+            class-names="pl-[15px] text-sm leading-[18px] text-[#443e40]" font-size="text-sm" />
+          <div class="px-[15px] mt-1 italic text-[13px]">
+            Available in stock: {{ productInStock }}
+          </div>
+          <div class="px-[15px]">
+            <div class="progress h-2.5 w-full mt-[5px] mb-0 mx-0 rounded-[25px] bg-[#f5f5f5]">
+              <div class="progress-bar h-2.5 rounded-[25px] bg-[#fed700]" :style="{ width: `${percentage}%` }"></div>
+            </div>
+          </div>
+          <figcaption class="card-figcaption mt-4 flex items-center justify-center gap-2">
+            <PhHeart title="Add to wishlist" :size="24" color="#888" class="icon-action cursor-pointer" />
+            <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="icon-action cursor-pointer" />
+            <PhEye @click="openProductModal" title="Quick view" :size="24" color="#888"
+              class="icon-action cursor-pointer" />
+          </figcaption>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -91,33 +121,33 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
 <style scoped>
 .card:hover .wdgimg-bg {
   -webkit-opacity: 1;
-    -moz-opacity: 1;
-    -khtml-opacity: 1;
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity .3s ease 0s,visibility 0s ease 0s,transform .3s ease 0s;
-    visibility: visible;
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity .3s ease 0s, visibility 0s ease 0s, transform .3s ease 0s;
+  visibility: visible;
 }
 
 .card .wdgimg-bg {
   background: #fff;
-    -ms-box-shadow: 0 0 10px rgba(0,0,0,.15);
-    -o-box-shadow: 0 0 10px rgba(0,0,0,.15);
-    box-shadow: 0 0 10px rgba(0,0,0,.15);
-    position: absolute;
-    border-radius: 8px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    -webkit-opacity: 0;
-    -moz-opacity: 0;
-    -khtml-opacity: 0;
-    opacity: 0;
-    transform: scale(.98);
-    transition: all .3s ease 0s;
-    z-index: -1;
-    visibility: hidden;
+  -ms-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  -o-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+  position: absolute;
+  border-radius: 8px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  opacity: 0;
+  transform: scale(.98);
+  transition: all .3s ease 0s;
+  z-index: -1;
+  visibility: hidden;
 }
 
 .card:hover .image-2 {
@@ -146,12 +176,13 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
 .card:hover .card-figcaption {
   opacity: 1;
   transition: all .4s ease-in-out;
+  pointer-events: all;
 }
 
 .swiper-slide img {
   width: 100%;
   height: auto;
-  max-height: 270px;
+  max-height: 222px;
 }
 
 .add-to-cart-btn {
@@ -192,5 +223,9 @@ const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.prod
   height: 46px;
   border-top: 1px solid #e5e5e5;
   pointer-events: none;
+}
+
+.icon-action:hover {
+  fill: #000;
 }
 </style>

@@ -38,7 +38,7 @@ export default {
   },
   setup() {
     return {
-      modules: [Autoplay],
+      modules: [],
     };
   },
 }

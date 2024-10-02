@@ -13,10 +13,6 @@ const listTabs = ['Description', 'Reviews'];
 const onChangeTab = (index: number) => {
   activeTab.value = index;
 };
-
-watch(() => props.description, (newVal, oldVal) => {
-  console.log('Description changed from', oldVal, 'to', newVal);
-}, { immediate: true });
 </script>
 
 <template>
