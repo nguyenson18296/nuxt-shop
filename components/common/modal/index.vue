@@ -27,7 +27,7 @@ const onCloseModal = (event: MouseEvent) => {
     style="background-color: rgba(0, 0, 0, 0.7);"
   >
     <div 
-      class="relative p-4 max-w-[calc(100vw_-_200px)] w-full max-h-full absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
+      class="relative p-4 max-w-[calc(100vw_-_500px)] w-full max-h-full absolute -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4"
       v-on-click-outside="onCloseModal"
     >
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">

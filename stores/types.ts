@@ -15,17 +15,19 @@ export interface ICartItem {
 export interface IProductItem {
   id: number;
   title: string;
-  slug: string;
+  slug?: string;
   thumbnail: string;
   price: string;
-  discount_price: string;
+  discount_price?: string;
   in_stock: number;
-  created_at: string;
-  updated_at: string;
-  short_description: string;
-  description: string;
-  images: string[];
+  created_at?: string;
+  updated_at?: string;
+  short_description?: string;
+  description?: string;
+  images?: string[];
 }
+
+export type TProductCompare = Pick<IProductItem, 'id' | 'title' | 'description' | 'thumbnail' | 'price' | 'slug'>;
 
 export type PostType = 'normal' | 'headline' | 'first_headline' | 'second_headline';
 

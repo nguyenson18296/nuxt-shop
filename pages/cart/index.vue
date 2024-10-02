@@ -39,8 +39,8 @@ const checkingVoucher = ref(false);
 
 const toast = useNuxtApp().$toast;
 
-function showSuccessMessage() {
-  toast('Create order failed. Please try again!', 5000);
+function showErrorToastMessage() {
+  toast('Create order failed. Please try again!', 5000, 'error');
 }
 
 const validationSchema = toTypedSchema(
@@ -110,7 +110,7 @@ const onRemoveCartItem = async () => {
       }
     },
     onResponseError: () => {
-      toast('Error when deleting cart item, please try again!', 5000);
+      toast('Error when deleting cart item, please try again!', 5000, 'error');
     }
   })
 };
@@ -141,7 +141,7 @@ const onCheckValidCoupon = async () => {
     },
     onResponseError: () => {
       isVoucherValid.value = false;
-      showSuccessMessage();
+      showErrorToastMessage();
     }
   })
   checkingVoucher.value = false;
@@ -184,7 +184,7 @@ const createOrder = async (values: any) => {
       }
     },
     onResponseError: () => {
-      toast('Error when creating order', 5000);
+      toast('Error when creating order', 5000, 'error');
     }
   })
 }
@@ -253,7 +253,7 @@ const updateQuantity = (newQuantity: number, id: number) => {
                 <td class="table-cell">
                   <ProductPrice
                     :price="+item.product.price" 
-                    :discount_price="+item.product.discount_price"
+                    :discount_price="+(item.product.discount_price ?? 0)"
                     font-size="text-sm"
                   />
                 </td>
@@ -268,7 +268,7 @@ const updateQuantity = (newQuantity: number, id: number) => {
                 <td class="text-right">
                   <div class="flex gap-1 items-center justify-end">
                     <ProductPrice :price="(+item.product.price * item.quantity)"
-                      :discount_price="+item.product.discount_price * item.quantity"
+                      :discount_price="+(item.product.discount_price ?? 0) * item.quantity"
                       font-size="text-sm"
                     />
                     <button @click.stop="() => onOpenConfirmModal(item.id)">

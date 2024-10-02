@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { PhShoppingCart, PhHeart, PhArrowsCounterClockwise, PhEye } from "@phosphor-icons/vue";
 
+import { type TProductCompare } from '@/stores/types';
+
 const props = defineProps({
   id: {
     type: Number,
@@ -14,6 +16,10 @@ const props = defineProps({
   images: {
     type: Array<string>,
     required: false,
+  },
+  description: {
+    type: String,
+    required: true,
   },
   title: {
     type: String,
@@ -36,6 +42,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const toast = useNuxtApp().$toast;
+const { pushProductForComparing } = useProductStore();
+
 const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.productInStock ?? 0;
 
 const isOpenProductModal = ref(false);
@@ -46,6 +56,23 @@ const openProductModal = () => {
 
 const closeDropdown = () => {
   isOpenProductModal.value = false;
+};
+
+const pushProductToCompare = () => {
+  try {
+    const productInfo: TProductCompare = {
+      id: props.id,
+      title: props.title,
+      thumbnail: props.imgSrc,
+      price: props.price,
+      description: props.description,
+      slug: props.slug,
+    }
+    pushProductForComparing(productInfo);
+    toast('Product added to compare list', 5000, 'success');
+  } catch (e: any) {
+    toast(e.message, 5000000, 'error');
+  }
 };
 
 </script>
@@ -108,7 +135,8 @@ const closeDropdown = () => {
           </div>
           <figcaption class="card-figcaption mt-4 flex items-center justify-center gap-2">
             <PhHeart title="Add to wishlist" :size="24" color="#888" class="icon-action cursor-pointer" />
-            <PhArrowsCounterClockwise title="Compare" :size="24" color="#888" class="icon-action cursor-pointer" />
+            <PhArrowsCounterClockwise @click="pushProductToCompare" title="Compare" :size="24" color="#888"
+              class="icon-action cursor-pointer" />
             <PhEye @click="openProductModal" title="Quick view" :size="24" color="#888"
               class="icon-action cursor-pointer" />
           </figcaption>
