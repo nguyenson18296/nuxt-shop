@@ -37,18 +37,6 @@ async function fetchData() {
   }
   stopLoading();
 }
-// await useFetch<{
-//   data: IProductItem;
-// }>(`/api/products/${slug}`, {
-//   baseURL: 'http://localhost:1996',
-//   method: 'GET',
-//   onResponse: ({ response }) => {
-//     if (!response.ok) {
-//       return console.error('Failed to fetch product');
-//     }
-//     product.value = response._data.data;
-//   }
-// });
 
 useSeoMeta({
   title: `Vue Shop - E-commerce - ${product.value.title} | Detail`,
@@ -64,8 +52,7 @@ const addToCart = async (quantity: number) => {
     product_id: product.value.id,
     quantity,
   }
-  console.log('form', form)
-  const { data } = await useFetch<{
+  const { data, execute } = await useFetch<{
     success: boolean;
   }>('/api/cart/add', {
     baseURL: 'http://localhost:1996',
@@ -75,12 +62,13 @@ const addToCart = async (quantity: number) => {
     },
     body: JSON.stringify(form)
   });
+
+  await execute();
+
   if (data.value?.success) {
-    addProductToCart(toRaw(product), quantity);
+    addProductToCart(product.value, quantity);
   }
 }
-
-console.log('product', product.value);
 
 </script>
 
@@ -88,9 +76,10 @@ console.log('product', product.value);
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs :title="product.title" />
     <div class="container">
-      <ProductDetails :id="product?.id" :title="product.title" :slug="product.slug" :thumbnail="product.thumbnail"
-        :description="product.description" :price="+product.price" :discount_price="+product.discount_price" :images="product.images"
+      <ProductDetails :id="product?.id" :title="product.title" :slug="product.slug ?? ''" :thumbnail="product.thumbnail"
+        :description="product.description ?? ''" :price="+product.price" :discount_price="+(product.discount_price ?? 0)" :images="product.images"
         :in_stock="product.in_stock"
+        :rating="product.rating"
         @add-to-cart="addToCart"
       />
     </div>

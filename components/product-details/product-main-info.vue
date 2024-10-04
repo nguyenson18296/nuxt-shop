@@ -30,10 +30,15 @@ defineProps({
     type: Number,
     required: true,
   },
+  rating: {
+    type: Number,
+    required: true,
+  },
 })
 
 const emit = defineEmits(['addToCart']);
 const quantity = ref(1);
+const toast = useNuxtApp().$toast;
 
 const updateQuantity = (newQuantity: number) => {
   quantity.value = newQuantity;
@@ -41,6 +46,10 @@ const updateQuantity = (newQuantity: number) => {
 
 const addToCart = () => {
   emit('addToCart', quantity.value);
+  toast('Product added to cart', {
+    type: 'success',
+    duration: 3000,
+  });
 }
 </script>
 
@@ -62,11 +71,8 @@ const addToCart = () => {
         <div
           class="product-rating flex items-center w-full border-b-neutral-200 mt-2.5 mb-[15px] mx-0 pt-0 pb-[15px] px-0 border-b border-solid">
           <div class="flex items-center gap-1">
-            <PhStar size="16" color="#ffbf34" />
-            <PhStar size="16" color="#ffbf34" />
-            <PhStar size="16" color="#ffbf34" />
-            <PhStar size="16" color="#ffbf34" />
-            <PhStar size="16" color="#ffbf34" />
+            <PhStar v-for="(v, i) of 5" :key="i" size="16" color="#ffbf34" :weight="rating >= i + 1 ? 'fill' : 'light'"
+              fill="#ffbf34" />
           </div>
           <div class="border-l-neutral-200 ml-5 pl-4 border-l border-solid">
             No reviews yet
@@ -172,5 +178,5 @@ const addToCart = () => {
         </div>
       </div>
     </div>
-    </div>
+  </div>
 </template>

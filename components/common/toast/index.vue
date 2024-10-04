@@ -19,7 +19,7 @@ const { toastList, removeToast } = useToast();
       <div class="ms-3 text-sm font-normal">
         {{ toastList[0].message }}
       </div>
-      <button type="button" data-dismiss-target="#toast-danger" aria-label="Close"
+      <button class="ml-2" type="button" data-dismiss-target="#toast-danger" aria-label="Close"
         @click="removeToast(toastList[0].id)">
         <span class="sr-only">Close</span>
         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">

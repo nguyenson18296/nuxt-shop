@@ -32,6 +32,10 @@ defineProps({
     type: Number,
     required: true,
   },
+  rating: {
+    type: Number,
+    required: true,
+  },
 })
 </script>
 
@@ -50,6 +54,7 @@ defineProps({
         :discount_price="discount_price"
         :in_stock="in_stock"
         :id="id"
+        :rating="rating"
       />
     </template>
   </modal>

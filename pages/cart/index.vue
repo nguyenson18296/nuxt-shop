@@ -98,7 +98,7 @@ const onRemoveCartItem = async () => {
     success: boolean;
   }>(`/api/cart/cart-item/${selectedCartItemId.value}`, {
     baseURL: 'http://localhost:1996',
-    method: 'POST',
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
@@ -106,6 +106,7 @@ const onRemoveCartItem = async () => {
       if (response.ok) {
         if (selectedCartItemId.value) {
           removeProductFromCart(selectedCartItemId.value);
+          onCancelDelete();
         }
       }
     },
@@ -216,14 +217,14 @@ const updateQuantity = (newQuantity: number, id: number) => {
 <template>
   <ConfirmModal v-if="isShowConfirmModal" modal-id="confirm-delete-modal" :is-open="isShowConfirmModal"
     text-confirm="Are you sure want to delete this product?" @close-modal="() => onCancelDelete()"
-    @confirm-delete="() => onRemoveCartItem()" />
+    @confirm-delete="onRemoveCartItem" />
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs title="Your cart" />
     <div class="container py-8">
-      <div class="mx-auto px-3">
+      <div class="mx-auto px-3" v-if="cart.length > 0">
         <SectionHeader title="Your cart" bgText="#fff" />
         <div data-cart-content>
-          <table class="cart block lg:table">
+          <table class="w-full cart block lg:table">
             <thead class="table-header-group">
               <tr>
                 <th class="hidden lg:table-cell" colspan="2">Item</th>
@@ -236,8 +237,8 @@ const updateQuantity = (newQuantity: number, id: number) => {
               <tr class="cart-item table-row border-b-neutral-200 border-b" v-for="item in cart" :key="item.product.id">
                 <td class="py-2">
                   <div>
-                    <NuxtImg :src="item.product.thumbnail" :alt="item.product.title" width="100"
-                      layout="fixed" class="max-w-[100px] p-2 border border-neutral-200 mx-0 my-2.5 rounded-lg border-solid" />
+                    <NuxtImg :src="item.product.thumbnail" :alt="item.product.title" width="100" layout="fixed"
+                      class="max-w-[100px] p-2 border border-neutral-200 mx-0 my-2.5 rounded-lg border-solid" />
                   </div>
                 </td>
                 <td class="table-cell p-6">
@@ -251,26 +252,18 @@ const updateQuantity = (newQuantity: number, id: number) => {
                   </h3>
                 </td>
                 <td class="table-cell">
-                  <ProductPrice
-                    :price="+item.product.price" 
-                    :discount_price="+(item.product.discount_price ?? 0)"
-                    font-size="text-sm"
-                  />
+                  <ProductPrice :price="+item.product.price" :discount_price="+(item.product.discount_price ?? 0)"
+                    font-size="text-sm" />
                 </td>
                 <td class="table-cell text-center">
                   <!-- {{ item.quantity }} -->
-                  <QuantityInput
-                    :quantity="item.quantity"
-                    :product-id="item.product.id"
-                    @update:quantity="($event) => updateQuantity($event, item.id)"
-                  />
+                  <QuantityInput :quantity="item.quantity" :product-id="item.product.id"
+                    @update:quantity="($event) => updateQuantity($event, item.id)" />
                 </td>
                 <td class="text-right">
                   <div class="flex gap-1 items-center justify-end">
                     <ProductPrice :price="(+item.product.price * item.quantity)"
-                      :discount_price="+(item.product.discount_price ?? 0) * item.quantity"
-                      font-size="text-sm"
-                    />
+                      :discount_price="+(item.product.discount_price ?? 0) * item.quantity" font-size="text-sm" />
                     <button @click.stop="() => onOpenConfirmModal(item.id)">
                       <PhTrash size="24" />
                     </button>
@@ -313,12 +306,8 @@ const updateQuantity = (newQuantity: number, id: number) => {
                     Address
                   </label>
                   <div class="flex flex-1 flex-col gap-1">
-                    <Field
-                      name="address" 
-                      type="text" 
-                      placeholder="Enter your address"
-                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
-                    />
+                    <Field name="address" type="text" placeholder="Enter your address"
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
                     <ErrorMessage class="text-[#cc4749]" name="address" />
                   </div>
                 </div>
@@ -328,8 +317,7 @@ const updateQuantity = (newQuantity: number, id: number) => {
                   </label>
                   <div class="flex flex-1 flex-col gap-1">
                     <Field name="full_name" type="text" placeholder="Enter your coupon code"
-                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
-                    />
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
                     <ErrorMessage class="text-[#cc4749]" name="full_name" />
                   </div>
                 </div>
@@ -339,8 +327,7 @@ const updateQuantity = (newQuantity: number, id: number) => {
                   </label>
                   <div class="flex flex-1 flex-col gap-1">
                     <Field name="phone" type="text" placeholder="Enter your coupon code"
-                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
-                    />
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-[2.28571rem] transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid" />
                     <ErrorMessage class="text-[#cc4749]" name="phone" />
                   </div>
                 </div>
@@ -361,16 +348,14 @@ const updateQuantity = (newQuantity: number, id: number) => {
                 <form v-show="isShowCouponInputForm" class="form flex flex-col gap-2">
                   <div class="flex items-center gap-2">
                     <input type="text" placeholder="Enter your coupon code"
-                    class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-12 transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
-                    v-model="couponCode"
-                  />
-                  <button
-                    :disabled="!couponCode"
-                    class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-2 border-neutral-200 text-[#666] font-semibold rounded-[25px] px-6 py-[0.57143rem] bg-[#e5e5e5] hover:bg-[#f27002] hover:text-white"
-                    type="button" @click="onCheckValidCoupon">
-                    Apply
-                    <LoadingIndicator v-show="checkingVoucher" color="white" class-names="w-6 h-6" />
-                  </button>
+                      class="appearance-none bg-white border-neutral-200 border rounded text-[#666] block text-[13px] antialiased h-12 transition-[border-color] duration-[0.1s] ease-[ease-out] w-full m-0 px-4 py-3 border-solid"
+                      v-model="couponCode" />
+                    <button :disabled="!couponCode"
+                      class="disabled:opacity-75 disabled:cursor-not-allowed flex items-center gap-2 border-neutral-200 text-[#666] font-semibold rounded-[25px] px-6 py-[0.57143rem] bg-[#e5e5e5] hover:bg-[#f27002] hover:text-white"
+                      type="button" @click="onCheckValidCoupon">
+                      Apply
+                      <LoadingIndicator v-show="checkingVoucher" color="white" class-names="w-6 h-6" />
+                    </button>
                   </div>
                   <p v-if="!isVoucherValid" class="text-[#cc4749]">
                     Voucher is not valid
@@ -421,7 +406,8 @@ const updateQuantity = (newQuantity: number, id: number) => {
                   <strong>
                     {{ convertToCurrency(grandTotal) }}
                   </strong>
-                  <span v-if="listVouchers.length > 0" class="text-sm font-bold text-gray-500 dark:text-gray-400 text-[#f27002] line-through">
+                  <span v-if="listVouchers.length > 0"
+                    class="text-sm font-bold text-gray-500 dark:text-gray-400 text-[#f27002] line-through">
                     {{ convertToCurrency(cartTotalDiscount) }}
                   </span>
                 </div>
@@ -430,15 +416,17 @@ const updateQuantity = (newQuantity: number, id: number) => {
           </div>
           <button
             class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
-            type="submit"
-          >
+            type="submit">
             <!-- <NuxtLink href="/checkout"> -->
-              Checkout
+            Checkout
             <!-- </NuxtLink> -->
           </button>
         </Form>
         <div class="clear-both" />
       </div>
+      <div v-else class="h-[300px] flex items-center justify-center text-2xl font-bold">
+        No products in your cart
+    </div>
     </div>
   </NuxtLayout>
 </template>

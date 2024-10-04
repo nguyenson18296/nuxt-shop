@@ -41,10 +41,16 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  rating: {
+    type: Number,
+    required: true,
+  },
 });
 
 const toast = useNuxtApp().$toast;
 const { pushProductForComparing } = useProductStore();
+const { addProductToCart } = useCartStore();
+const token = useCookie('token')
 
 const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.productInStock ?? 0;
 
@@ -75,13 +81,39 @@ const pushProductToCompare = () => {
   }
 };
 
+const addToCart = async () => {
+  const form = {
+    product_id: props.id,
+    quantity: 1,
+  }
+  const { data, execute } = await useFetch<{
+    data: IProductItem;
+    success: boolean;
+  }>('/api/cart/add', {
+    baseURL: 'http://localhost:1996',
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    },
+    body: JSON.stringify(form)
+  });
+
+  await execute();
+
+  console.log('data', data.value);
+
+  if (data.value?.success) {
+    addProductToCart(data.value.data, 1);
+  }
+}
+
 </script>
 
 <template>
   <Teleport to="body">
     <product-main-info-modal :is-open="isOpenProductModal" :thumbnail="imgSrc ?? ''" :images="images" :title="title"
       :price="+price" :discount_price="+(discountPrice ?? 0)" :in_stock="productInStock" :id="id"
-      @update:isOpen="closeDropdown" />
+      @update:isOpen="closeDropdown" :rating="rating" />
   </Teleport>
   <div class="py-0 px-[15px] h-[510px]">
     <div
@@ -117,9 +149,17 @@ const pushProductToCompare = () => {
           <a
             class="card-figcaption-button ml-auto mr-0 flex items-center justify-center h-9 leading-9 text-[13px] w-9 text-white bg-[#443e40] overflow-hidden transition-all duration-[0.4s] ease-[ease-in-out] font-semibold z-[1] relative mx-auto my-0 p-0 rounded-[25px] border-[none] border-transparent cursor-pointer">
             <PhShoppingCart size="24" class="shopping-cart-icon" />
-            <span class="add-to-cart-btn">
+            <button
+              v-if="productInStock > 0"
+              type="button"
+              class="add-to-cart-btn"
+              @click.stop="addToCart"
+            >
               Add to Cart
-            </span>
+            </button>
+            <button disabled="true" class="add-to-cart-btn" v-else>
+              Out of stock
+            </button>
           </a>
         </div>
         <div class="relative">
