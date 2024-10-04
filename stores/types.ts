@@ -35,12 +35,20 @@ export type PostType = 'normal' | 'headline' | 'first_headline' | 'second_headli
 export interface IPost {
   id: number;
   title: string;
+  seo_title: string;
   slug: string;
   short_description: string;
+  seo_description: string;
   content: string;
   cover_photo: string;
   created_at: string;
   post_type: PostType;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    avatar: string;
+  }
 }
 
 export type FunctionArgs<Args extends any[] = any[], Return = void> = (...args: Args) => Return;

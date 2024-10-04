@@ -56,9 +56,7 @@ getMe();
               </div>
             </div>
           </NuxtLink>
-          <Dropdown
-            dropdownButtonId="user-dropdown"
-          >
+          <Dropdown dropdownButtonId="user-dropdown">
             <template #trigger>
               <div class="flex items-center gap-2">
                 <PhUser :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
@@ -116,42 +114,63 @@ getMe();
           <ShopByCategoryDropdown />
           <div class="flex items-center">
             <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
-              <a
+              <NuxtLink to="/about-us"
                 class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
                 About Us
-              </a>
+              </NuxtLink>
             </div>
             <div class="flex items-center group mt-1.5 mb-0 mx-2">
-              <a
+              <NuxtLink to="/affiliate"
                 class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
                 Affiliate
-              </a>
+              </NuxtLink>
             </div>
             <div class="flex items-center group mt-1.5 mb-0 mx-2">
-              <a
+              <NuxtLink to="/contact-us"
                 class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
                 Contact Us
-              </a>
+              </NuxtLink>
             </div>
             <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
-              <a
+              <NuxtLink to="/return-policy"
                 class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
                 Return Policy
-              </a>
+              </NuxtLink>
             </div>
-            <div class="cursor-pointer group mt-1.5 mb-0 mx-2">
-              <a
-                class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
-                Terms & Conditions
-              </a>
-            </div>
-            <div class="cursor-pointer group mt-1.5 mb-0 mx-2 flex items-center">
-              <a
-                class="group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
-                More
-              </a>
-              <PhCaretDown color="#fff" />
-            </div>
+            <Dropdown dropdown-button-id="more-dropdown" :should-open-on-hover="true"
+              content-class-names="left-0 top-[50px]">
+              <template #trigger>
+                <div class="cursor-pointer group mt-1.5 mb-0 mx-2 flex items-center">
+                  <a
+                    class="flex items-center gap-1 group-hover:bg-[#443e40] text-white no-underline block float-left overflow-hidden relative capitalize z-[1] transition-all duration-[0.4s] ease-[ease-in-out] m-0 px-5 py-3 rounded-lg">
+                    <span>
+                      More
+                    </span>
+                    <PhCaretDown color="#fff" />
+                  </a>
+                </div>
+              </template>
+              <template #dropdown-content>
+                <div
+                  class="preview-cart max-h-[496px] w-[200px] overflow-y-auto px-[15px] py-[5px] bg-[white] rounded-lg">
+                  <div>
+                    <NuxtLink class="text-[#666] leading-[26px] hover:text-[#111]" to="/terms-and-conditions">
+                      Terms & Conditions
+                    </NuxtLink>
+                  </div>
+                  <div>
+                    <NuxtLink class="text-[#666] leading-[26px] hover:text-[#111]" to="/shipping-policy">
+                      Shipping Policy
+                    </NuxtLink>
+                  </div>
+                  <div>
+                    <NuxtLink class="text-[#666] leading-[26px] hover:text-[#111]" to="/blogs">
+                      Blogs
+                    </NuxtLink>
+                  </div>
+                </div>
+              </template>
+            </Dropdown>
           </div>
         </div>
       </div>
