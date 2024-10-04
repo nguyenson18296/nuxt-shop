@@ -36,15 +36,15 @@ defineProps({
     type: Number,
     required: false,
   },
+  rating: {
+    type: Number,
+    required: true,
+  },
 })
 
 const emit = defineEmits(['addToCart']);
 
 const quantity = ref(1);
-
-const updateQuantity = (newQuantity: number) => {
-  quantity.value = newQuantity;
-};
 
 const addToCart = () => {
   emit('addToCart', quantity.value);
@@ -62,6 +62,7 @@ const addToCart = () => {
       :discount_price="discount_price"
       :in_stock="in_stock"
       :id="id"
+      :rating="rating"
       @addToCart="addToCart"
     />
     <ProductDescription :description="description" />

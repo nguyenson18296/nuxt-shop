@@ -36,26 +36,53 @@ const props = defineProps({
     type: Array<string>,
     required: false,
   },
+  rating: {
+    type: Number,
+    required: true,
+  },
 });
+
+const { addProductToCart } = useCartStore();
+const token = useCookie('token')
 const percentage = ((props.productInStock ?? 0) / 100) > 1 ? '100%' : props.productInStock ?? 0;
 const modules = [Navigation];
 
 const isOpenProductModal = ref(false);
 
 const openProductModal = () => {
-  console.log('openProductModal');
   isOpenProductModal.value = true;
 };
 
-const closeDropdown = () => {
-  console.log('closeDropdown');
-  isOpenProductModal.value = false;
-};
+const addToCart = async () => {
+  const form = {
+    product_id: props.id,
+    quantity: 1,
+  }
+  const { data, execute } = await useFetch<{
+    data: IProductItem;
+    success: boolean;
+  }>('/api/cart/add', {
+    baseURL: 'http://localhost:1996',
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token.value}`
+    },
+    body: JSON.stringify(form)
+  });
+
+  await execute();
+
+  if (data.value?.success) {
+    addProductToCart(data.value.data, 1);
+  }
+}
 </script>
 
 <template>
   <Teleport to="body">
-    <product-main-info-modal :is-open="isOpenProductModal" :thumbnail="imgSrc ?? ''" :images="productImages"
+    <product-main-info-modal
+      :rating="rating"
+      :is-open="isOpenProductModal" :thumbnail="imgSrc ?? ''" :images="productImages"
       :title="title" :price="+price" :discount_price="+(discountPrice ?? 0)" :in_stock="productInStock" :id="id" />
   </Teleport>
   <div class="px-[15px] h-[550px] py-0 block">
@@ -96,9 +123,12 @@ const closeDropdown = () => {
               <a
                 class="card-figcaption-button ml-auto mr-0 flex items-center justify-center h-9 leading-9 text-[13px] w-9 text-white bg-[#443e40] overflow-hidden transition-all duration-[0.4s] ease-[ease-in-out] font-semibold z-[1] relative mx-auto my-0 p-0 rounded-[25px] border-[none] border-transparent cursor-pointer">
                 <PhShoppingCart size="24" class="shopping-cart-icon" />
-                <span class="add-to-cart-btn">
+                <button
+                  class="add-to-cart-btn"
+                  @click="addToCart"
+                >
                   Add to Cart
-                </span>
+                </button>
               </a>
             </div>
             <div class="px-[15px] mt-1 italic text-[13px]">

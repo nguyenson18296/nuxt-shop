@@ -25,6 +25,7 @@ export interface IProductItem {
   short_description?: string;
   description?: string;
   images?: string[];
+  rating: number;
 }
 
 export type TProductCompare = Pick<IProductItem, 'id' | 'title' | 'description' | 'thumbnail' | 'price' | 'slug'>;

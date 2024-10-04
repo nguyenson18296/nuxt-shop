@@ -51,11 +51,13 @@ const products = data.value?.data || [];
         :id="product.id"
         :imgSrc="product.thumbnail" 
         :title="product.title"
-        :slug="product.slug"
+        :slug="product.slug ?? ''"
         :productInStock="product.in_stock"
         :price="product.price"
         :discount-price="product.discount_price"
         :second-img-src="product.images?.[0] ?? ''"
+        :rating="product.rating"
+        :description="product.description ?? ''"
       />
     </swiper-slide>
   </NuxtLayout>

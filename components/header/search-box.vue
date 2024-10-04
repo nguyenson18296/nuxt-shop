@@ -50,10 +50,6 @@ const closeDropdown = (event: MouseEvent) => {
   }
 };
 
-const openDropdownCondition = computed(() => {
-  return isOpenDropdown.value || searchedProducts.value.length > 0;
-});
-
 const onFocus = () => {
   if (searchedProducts.value.length > 0) {
     isOpenDropdown.value = true;
@@ -105,7 +101,7 @@ console.log('searchTerm', searchTerm.value);
               </h3>
              <ProductPrice
               :price="+product.price"
-              :discount_price="+product.discount_price"
+              :discount_price="+(product.discount_price ?? 0)"
               class-names="justify-content-start"
               font-size="text-sm"
              />
