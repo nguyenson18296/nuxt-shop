@@ -1,9 +1,9 @@
 <template>
   <NuxtLayout name="page-wrapper">
-    <Breadcrumbs title="About us"/>
+    <Breadcrumbs title="Return Policy"/>
     <div class="container min-h-[calc(100vh_-_700px)]">
-      <SectionHeader title="About us" bgText="#fff" />
-      About us
+      <SectionHeader title="Return Policy" bgText="#fff" />
+      Return Policy
     </div>
   </NuxtLayout>
 </template>

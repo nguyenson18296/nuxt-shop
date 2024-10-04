@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const props = defineProps({
-
   dropdownButtonId: {
     type: String,
     required: true,
@@ -9,9 +8,16 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  shouldOpenOnHover: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const isOpenDropdown = ref(false);
+const triggerButtonRef = ref();
+
+const { isHovering } = useElementHover(triggerButtonRef);
 
 const toggleDropdown = () => {
   isOpenDropdown.value = !isOpenDropdown.value;
@@ -30,11 +36,25 @@ const close = () => {
 defineExpose({
   close,
 });
+
+watch(isHovering, (isHovering) => {
+  if (props.shouldOpenOnHover) {
+    isOpenDropdown.value = isHovering;
+  }
+});
 </script>
 
 <template>
-  <div class="relative">
-    <button :id="dropdownButtonId" data-dropdown-toggle="dropdown" @click="toggleDropdown">
+  <div
+    class="relative"
+    ref="triggerButtonRef"
+  >
+    <button
+      :id="dropdownButtonId"
+      data-dropdown-toggle="dropdown" 
+      @click="toggleDropdown"
+      ref="triggerButtonRef"
+    >
       <slot name="trigger" />
     </button>
     <transition name="p-connected-overlay">

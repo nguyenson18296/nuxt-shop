@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
+
 const props = defineProps({
   posts: {
     type: Array as PropType<IPost[]>,
@@ -31,25 +33,31 @@ watchEffect(() => {
   <ClientOnly>
     <div class="grid grid-cols-2 gap-y-4 gap-x-8">
       <div class="grid-cols-6" v-for="post in posts" :key="post.id">
-        <a :href="`/posts/${post.slug}`">
           <div class="card flex items-start gap-4">
-            <figure class="flex-[0_0_50%]">
-              <img :src="post.cover_photo" :alt="post.title" class="h-[200px] object-cover" />
+            <figure class="flex-[0_0_30%]">
+              <NuxtLink :to="`/blogs/${post.slug}`">
+                <NuxtImg :src="post.cover_photo" :alt="post.title" class="h-[200px] w-[300px] object-cover" />
+              </NuxtLink>
             </figure>
             <div class="flex-[0_0_50%]">
-              <h2
-                class="blog-header font-semibold text-left border-b-neutral-200 capitalize relative ml-0 mb-[15px] pb-2.5 border-b border-solid">
-                {{ post.title }}
-              </h2>
+              <NuxtLink :to="`/blogs/${post.slug}`">
+                <h2
+                  class="blog-header font-semibold text-left border-b-neutral-200 capitalize relative ml-0 mb-[15px] pb-2.5 border-b border-solid">
+                  {{ post.title }}
+                </h2>
+              </NuxtLink>
               <p class="text-[#666] mb-6 text-sm">
-                {{ post.created_at }}
+                {{ dayjs(post.created_at).format('MMMM DD, YYYY') }}
               </p>
               <p class="post-description">
                 {{ post.short_description }}
               </p>
+              <p>
+                <span class="text-[#666]">By </span>
+                <span class="text-[#666]">{{ post.user.username }}</span>
+              </p>
             </div>
           </div>
-        </a>
       </div>
     </div>
     <div class="posts-bottom opacity-0" ref="bottomEl" />
