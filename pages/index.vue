@@ -37,5 +37,8 @@ start();
     <section>
       <NewPosts />
     </section>
+    <section id="testimonials">
+      <Testimonials />
+    </section>
   </NuxtLayout>
 </template>

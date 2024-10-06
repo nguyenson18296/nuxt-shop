@@ -6,7 +6,10 @@ import { useAuthStore, type UserInterface } from '@/stores/auth';
 const { user, authenticated } = storeToRefs(useAuthStore());
 const { compareProducts } = storeToRefs(useProductStore());
 const { setUser } = useAuthStore();
-const token = useCookie('token')
+const token = useCookie('token');
+
+const headerRef = ref<HTMLElement | null>(null);
+const scrollPosition = useScroll(headerRef);
 
 const getMe = async () => {
   const { data } = useFetch<{
@@ -29,8 +32,14 @@ getMe();
 </script>
 
 <template>
-  <header>
-    <div class="header-center bg-[#443e40] px-0 py-[15px] w-full">
+  <header
+    ref="headerRef"
+  >
+    <div
+      ref="headerRef"
+      class="header-center bg-[#443e40] px-0 py-[15px] w-full"
+      :class="{ fixed: !scrollPosition.inView }"
+    >
       <div class="container !flex items-center">
         <div class="header-logo text-center mt-[22px] mb-[19px] mx-0 lg:p-0">
           <NuxtLink href="/">
@@ -47,7 +56,7 @@ getMe();
         </div>
         <div class="ml-4 nav-user flex items-center gap-4">
           <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
-          <NuxtLink to="/compare">
+          <NuxtLink to="/compare" v-if="comparedProductLength > 0">
             <div class="relative">
               <PhArrowsClockwise :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
               <div
@@ -177,3 +186,37 @@ getMe();
     </div>
   </header>
 </template>
+
+<style scoped>
+header .header-center.fixed {
+  border: medium none;
+  left: 0;
+  margin: 0;
+  position: fixed!important;
+  right: 0;
+  top: 0;
+  width: 100%;
+  padding: 5px 0;
+  z-index: 9;
+  background: #f27002;
+  box-shadow: 0 0 4px 0 rgba(0,0,0,.2);
+  -moz-box-shadow: 0 0 4px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow: 0 0 4px 0 rgba(0,0,0,.2);
+  transition: all .4s ease 0s;
+  animation: fixedmenu 0.5s ease 0s normal both 1 running;
+  -webkit-animation: fixedmenu 0.5s ease 0s normal both 1 running;
+  -moz-animation: fixedmenu 0.5s ease 0s normal both 1 running;
+  -o-animation: fixedmenu 0.5s ease 0s normal both 1 running;
+  min-height: auto;
+}
+
+@keyframes fixedmenu {
+    0% {
+        top: -100%
+    }
+
+    100% {
+        top: 0
+    }
+}
+</style>

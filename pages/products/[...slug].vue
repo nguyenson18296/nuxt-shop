@@ -29,6 +29,8 @@ async function fetchData() {
   // Execute the fetch and await its completion
   await execute();
 
+  console.log('data', data.value);
+
   if (data.value?.success) {
     product.value = data.value.data;
   } else {
