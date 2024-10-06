@@ -69,9 +69,9 @@ const headlinePost = computed(() => {
   <NuxtLayout name="page-wrapper">
     <Breadcrumbs title="Blogs" />
     <div class="container pb-8">
-      <SectionHeader title="Blog" bg-text="#fff" />
+      <SectionHeader title="Blogs" bg-text="#fff" />
       <div class="mb-[30px] flex items-start gap-4">
-        <div class="news-trending flex-[0_0_30%] flex flex-col gap-4">
+        <div class="news-trending flex-[0_0_25%] flex flex-col gap-4">
           <article v-for="(post, index) in trendingPosts" :key="post.id" class="p-2" :class="{
             'border-b border-solid border-b-neutral-200': index !== trendingPosts.length - 1
           }">
@@ -86,7 +86,7 @@ const headlinePost = computed(() => {
           </article>
         </div>
         <div class="flex-[0_0_70%] flex items-start gap-4">
-          <div class="heading-post">
+          <div class="heading-post flex-[0_0_60%]">
             <article v-if="headlinePost" class="flex flex-col items">
               <NuxtLink :href="`/posts/${headlinePost.slug}`" class="flex flex-col">
                 <NuxtImg :src="headlinePost.cover_photo" :alt="headlinePost.title" width="100%" height="400" />
@@ -115,11 +115,7 @@ const headlinePost = computed(() => {
           </div>
         </div>
       </div>
-      <PostsList
-        :posts="posts"
-        :can-fetch-more="canFetchMore"
-        @fetch-more-posts="fetchMorePosts"
-      />
+      <PostsList :posts="posts" :can-fetch-more="canFetchMore" @fetch-more-posts="fetchMorePosts" />
     </div>
   </NuxtLayout>
 </template>

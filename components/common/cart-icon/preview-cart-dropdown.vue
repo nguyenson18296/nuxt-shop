@@ -15,14 +15,15 @@ defineProps({
   <div class="preview-cart max-h-[496px] w-[300px] overflow-y-auto px-[15px] py-[5px] bg-[white]">
     <ul class="preview-cart-list py-2">
       <li class="flex items-center hover:bg-[#cccccc]" v-for="product in products" :key="product.id">
-        <img :src="product.thumbnail" :alt="product.title" class="w-[50px] h-[50px] rounded-[5px]" />
+        <NuxtImg :src="product.thumbnail" :alt="product.title" class="w-[50px] h-[50px] rounded-[5px]" />
         <div class="flex flex-col ml-[10px]">
-          <span class="product-title text-[#666] text-[13px] font-normal">
-            {{ product.title }}
-          </span>
-          <span class="text-[#666] text-[13px] font-semibold">
-            {{ product.price }}
-          </span>
+          <NuxtLink :to="`/products/${product.slug}`">
+            <span class="product-title text-[#666] text-[13px] font-normal">
+              {{ product.title }}
+            </span>
+          </NuxtLink>
+          <product-price class-names="justify-start" font-size="text-sm" :price="+product.price"
+            :discount_price="+(product.discount_price || 0)" />
         </div>
       </li>
     </ul>

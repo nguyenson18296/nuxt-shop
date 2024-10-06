@@ -9,7 +9,7 @@ const { toastList, removeToast } = useToast();
 <template>
   <transition name="v-enter-from">
     <div :id="toastList[0].id"
-      class="fixed top-5 right-5 z-50 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+      class="fixed top-5 right-5 z-1000 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
       role="alert" v-if="toastList.length > 0">
       <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8">
         <PhCheckCircle v-if="toastList[0].type === 'success'" :size="32" color="#10e01d" weight="fill" />
