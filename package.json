@@ -21,6 +21,7 @@
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.2",
     "swiper": "^11.1.14",
+    "tailwind-merge": "^2.5.3",
     "vee-validate": "^4.13.2",
     "vue": "v3.5.8",
     "vue-router": "latest",

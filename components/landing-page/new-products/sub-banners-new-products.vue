@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { PhCaretRight } from "@phosphor-icons/vue";
+import { twMerge } from 'tailwind-merge';
 </script>
 
 <template>
   <div class="w-full">
     <div class="container">
-      <div class="flex items-center gap-[30px]">
+      <div class="flex flex-wrap items-center gap-[30px]">
         <div class="relative">
           <a href="#">
             <img src="https://cdn11.bigcommerce.com/s-gl0yzafqud/product_images/uploaded_images/bottom-banner-01.jpg"
@@ -16,7 +17,11 @@ import { PhCaretRight } from "@phosphor-icons/vue";
               New Arrivals
             </h4>
             <h1
-              class="min-w-max font-bold text-[28px] leading-[34px] capitalize text-[#111] mt-0 mb-2.5 mb-[15px] mx-0">
+              :class="twMerge(
+                'min-w-max font-bold capitalize mt-0 mb-2.5 mb-[15px] mx-0',
+                'text-sm lg:text-[28px] lg:leading-[34px] text-[#111]'
+              )"
+            >
               Style Hat Cap
             </h1>
             <div class="banner-button">
@@ -39,7 +44,12 @@ import { PhCaretRight } from "@phosphor-icons/vue";
             <h4 class="font-normal text-base leading-5 capitalize text-white mt-0 mb-[5px] mx-0">
               New Arrivals
             </h4>
-            <h1 class="min-w-max font-bold text-[28px] leading-[34px] capitalize text-white mt-0 mb-2.5 mb-[15px] mx-0">
+            <h1
+              :class="twMerge(
+                'min-w-max font-bold capitalize mt-0 mb-2.5 mb-[15px] mx-0',
+                'text-sm lg:text-[28px] lg:leading-[34px] text-white'
+              )"
+            >
               Daniel Wellington
             </h1>
             <div class="banner-button">
@@ -76,10 +86,18 @@ import { PhCaretRight } from "@phosphor-icons/vue";
   color: #fff;
   text-align: center;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 18px;
   border-radius: 25px;
   transition: .4s ease-in-out;
-  padding: 8px 15px;
+  padding: 4px 10px;
+}
+
+@media screen and (min-width: 1024px) {
+  .banner-button a.button {
+    font-size: 16px;
+    line-height: 20px;
+    padding: 8px 15px;
+  }
 }
 </style>

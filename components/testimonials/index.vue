@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { twMerge } from 'tailwind-merge';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -12,13 +13,18 @@ const modules = [Pagination];
 <template>
   <div class="bg-[#f7f7f7]">
     <div class="container">
-      <div class="flex">
-        <div class="pl-0 pr-[30px] pt-10 pb-[30px] flex-[0_0_55%]">
+      <div class="flex flex-wrap">
+        <div
+          :class="twMerge(
+            'md:pl-0 md:pr-[30px] md:pt-10 md:pb-[30px] flex-[0_0_100%] lg:flex-[0_0_55%]',
+            'p-0 py-2'
+          )"
+        >
           <swiper :direction="'vertical'" :modules="modules" :pagination="{
             clickable: true,
           }">
             <swiper-slide>
-              <div class="flex items-start gap-2">
+              <div class="flex flex-wrap items-start gap-2">
                 <div class="flex items-center gap-5">
                   <NuxtImg src="https://pub-static.fotor.com/assets/ai-avatar/styles/fotorWeb/srmjoeg2h6kk.jpg"
                     alt="avatar" width="100" height="100" class="rounded-[50%] !w-[100px] h-[100px]" />
@@ -88,7 +94,12 @@ const modules = [Pagination];
             </swiper-slide>
           </swiper>
         </div>
-        <div class="pl-[30px] pr-0 pt-[30px] border-l-[#00000014] border-l border-solid">
+        <div
+          :class="twMerge(
+            'border-l-[#00000014] md:border-l md:border-solid',
+            'py-4 md:pl-[30px] md:pr-0 md:pt-[30px]'
+          )"
+        >
           <h5 class="text-[#111] cursor-pointer text-lg font-semibold leading-[22px] capitalize mt-0 mb-5 mx-0">
             download app
           </h5>

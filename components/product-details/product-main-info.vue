@@ -55,8 +55,8 @@ const addToCart = () => {
 
 <template>
   <div class="product-view p-4">
-    <div class="flex items-start gap-8">
-      <div class="product-view-images flex-[0_0_40%]">
+    <div class="flex flex-wrap lg:flex-nowrap items-start gap-8">
+      <div class="product-view-images flex-[0_0_100%] lg:flex-[0_0_40%]">
         <ProductImages :thumbnail="thumbnail" :images="images" />
       </div>
       <div class="product-details">

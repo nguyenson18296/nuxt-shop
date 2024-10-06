@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { PhMapPin, PhEnvelope, PhPhone } from "@phosphor-icons/vue";
 import { storeToRefs } from 'pinia';
+import { twMerge } from 'tailwind-merge';
 
 import { useCategoriesStore } from "@/stores/categories";
 
@@ -18,8 +19,12 @@ onMounted(async () => {
   <footer>
     <div class="subscription w-full bg-[#f27002]">
       <div class="container py-[18px]">
-        <article class="full-subscription flex items-center gap-12">
-          <div class="flex-[0_0_50%] text-white flex items-center gap-4">
+        <article class="full-subscription flex flex-wrap lg:flex-nowrap items-center gap-4 lg:gap-12">
+          <div
+            :class="twMerge(
+              'flex-[0_0_100%] lg:flex-[0_0_50%]',
+              'text-white flex flex-wrap justify-center md:justify-start items-center gap-4'
+            )">
             <h5 class="footer-heading text-xl flex items-center gap-2">
               <PhEnvelope :size="32" />
               <span>
@@ -46,7 +51,7 @@ onMounted(async () => {
     </div>
     <div class="footer-link bg-[#191919] pt-10 pb-2.5">
       <div class="container">
-        <section class="footer-info flex items-start">
+        <section class="footer-info flex flex-wrap gap-2 items-start">
           <article class="store-info-payment flex-[0_0_25%]">
             <h5 class="text-white cursor-pointer text-lg font-semibold leading-[22px] capitalize mt-0 mb-5 mx-0">
               Info
@@ -75,7 +80,7 @@ onMounted(async () => {
               </li>
             </ul>
           </article>
-          <article class="footer-link flex-[0_0_25%]">
+          <article class="footer-link flex-[0_0_100%] lg:flex-[0_0_25%]">
             <h5 class="text-white cursor-pointer text-lg font-semibold leading-[22px] capitalize mt-0 mb-5 mx-0">
               Navigate
             </h5>
@@ -106,7 +111,7 @@ onMounted(async () => {
               </li>
             </ul>
           </article>
-          <article class="footer-categories flex-[0_0_25%]">
+          <article class="footer-categories flex-[0_0_100%] lg:flex-[0_0_25%]">
             <h5 class="text-white cursor-pointer text-lg font-semibold leading-[22px] capitalize mt-0 mb-5 mx-0">
               Categories
             </h5>
@@ -116,7 +121,7 @@ onMounted(async () => {
               </li>
             </ul>
           </article>
-          <article class="footer-popular-brands flex-[0_0_25%]">
+          <article class="footer-popular-brands flex-[0_0_100%] lg:flex-[0_0_25%]">
             <h5 class="text-white cursor-pointer text-lg font-semibold leading-[22px] capitalize mt-0 mb-5 mx-0">
               Popular Brands
             </h5>

@@ -2,6 +2,7 @@
 import { storeToRefs } from 'pinia';
 import { PhCaretDown, PhPhone, PhHeart, PhUser, PhUserCheck, PhSignOut, PhArrowsClockwise } from "@phosphor-icons/vue";
 import { useAuthStore, type UserInterface } from '@/stores/auth';
+import { twMerge } from 'tailwind-merge';
 
 const { user, authenticated } = storeToRefs(useAuthStore());
 const { compareProducts } = storeToRefs(useProductStore());
@@ -40,21 +41,27 @@ getMe();
       class="header-center bg-[#443e40] px-0 py-[15px] w-full"
       :class="{ fixed: !scrollPosition.inView }"
     >
-      <div class="container !flex items-center">
-        <div class="header-logo text-center mt-[22px] mb-[19px] mx-0 lg:p-0">
+      <div class="container !flex flex-wrap justify-between items-center">
+        <div class="header-logo text-center mt-[22px] mb-[19px] mx-0 lg:p-0 order-1">
           <NuxtLink href="/">
-            <img src="/img/flex-cart.webp" alt="flex-cart" />
+            <img
+              src="/img/flex-cart.webp" 
+              alt="flex-cart"
+              class="w-[136px]"
+            />
           </NuxtLink>
         </div>
         <SearchBox />
         <div
-          class="bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white flex items-center gap-2">
+          :class="twMerge('bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white flex items-center gap-2', 'order-3 hidden lg:block')">
           <PhPhone />
           <div>
             +(00)1234 567891
           </div>
         </div>
-        <div class="ml-4 nav-user flex items-center gap-4">
+        <div
+          :class="twMerge('ml-4 nav-user flex items-center gap-2 md:gap-4',
+            'order-2 lg:order-4')">
           <PhHeart :size="30" color="white" class="cursor-pointer hover:fill-[#f27002]" />
           <NuxtLink to="/compare" v-if="comparedProductLength > 0">
             <div class="relative">
@@ -117,7 +124,8 @@ getMe();
         </div>
       </div>
     </div>
-    <div class="header-bottom bg-[#f27002] text-center w-full px-0 py-2">
+    <div
+      class="header-bottom bg-[#f27002] text-center w-full px-0 py-2">
       <div class="container">
         <div class="flex items-center">
           <ShopByCategoryDropdown />

@@ -415,7 +415,7 @@ const updateQuantity = (newQuantity: number, id: number) => {
             </ul>
           </div>
           <button
-            class="float-right button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
+            class="button-primary font-semibold text-white text-sm leading-[18px] tracking-[1px] normal-case w-auto relative transition-[0.5s] duration-[ease-in-out] m-0 px-5 py-2.5 rounded-[25px] border-[none] bg-[#443e40]"
             type="submit">
             <!-- <NuxtLink href="/checkout"> -->
             Checkout

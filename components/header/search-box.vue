@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PhMagnifyingGlass } from "@phosphor-icons/vue";
+import { twMerge } from 'tailwind-merge';
 
 const searchTerm = ref('');
 const isOpenDropdown = ref(false);
@@ -64,7 +65,10 @@ console.log('searchTerm', searchTerm.value);
 </script>
 
 <template>
-  <div id="dropdown" class="search-bar relative w-[40%] px-[15px] py-0">
+  <div id="dropdown"
+  :class="twMerge('search-bar relative w-full lg:w-[40%] px-0 lg:px-[15px] py-0', 'dark:bg-gray-700',
+    'order-3 lg:order-2'
+  )">
     <div class="w-full relative">
       <input
         v-model="searchTerm"

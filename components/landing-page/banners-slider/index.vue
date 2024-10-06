@@ -59,9 +59,13 @@ export default {
   background-size: cover;
 }
 
+@media (min-width: 1024) {
+  .swiper-slide img {
+    max-height: 42.85714rem;
+  }
+}
 .swiper-slide img {
   display: block;
-  max-height: 42.85714rem;
   width: 100%;
 }
 
