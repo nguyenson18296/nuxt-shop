@@ -32,11 +32,39 @@ export default {
 <template>
   <div class="w-full mb-[30px]">
     <div class="container">
-      <swiper :slidesPerView="4" :loop="true" :spaceBetween="30" :pagination="{
+      <swiper
+        :slidesPerView="4" 
+        :loop="true" 
+        :spaceBetween="30" 
+        :pagination="{
         clickable: true,
-      }" :modules="modules" :autoplay="{
+        }" 
+        :modules="modules" :autoplay="{
         delay: 2500,
-      }" class="mySwiper">
+      }"
+      :breakpoints="{
+      320: {
+        slidesPerView: 1,
+        spaceBetween: 20,
+      },
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 3,
+        spaceBetween: 30,
+      },
+      1024: {
+        slidesPerView: 5,
+        spaceBetween: 30,
+      },
+      1280: {
+        slidesPerView: 6,
+        spaceBetween: 30,
+      },
+    }"
+      class="mySwiper">
         <swiper-slide>
           <div class="w-[380px] flex">
             <div class="offer-img width-[36.3%]">

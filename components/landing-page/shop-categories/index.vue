@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { twMerge } from 'tailwind-merge';
 import { SwiperSlide } from 'swiper/vue';
 import { PhCaretCircleRight } from '@phosphor-icons/vue';
 
@@ -17,7 +18,7 @@ const { categories } = storeToRefs(categoriesStore);
     number-of-slides="6"
     :breakpoints="{
       320: {
-        slidesPerView: 1,
+        slidesPerView: 2,
         spaceBetween: 20,
       },
       640: {
@@ -40,9 +41,16 @@ const { categories } = storeToRefs(categoriesStore);
   >
     <swiper-slide v-for="category in categories" :key="category.id">
       <div class="px-[30px] py-[5px]">
-        <div class="image group w-full relative overflow-hidden shadow-[0_0_4px_rgba(0,0,0,0.15)] rounded-[50%]">
+        <div :class='twMerge(
+          "image group w-full relative overflow-hidden shadow-[0_0_4px_rgba(0,0,0,0.15)] rounded-[50%]",
+          "w-[192px] h-[192px]"
+        )'>
           <NuxtLink :to="`/category/${category.slug}`">
-            <NuxtImg :src="category.thumbnail" :alt="category.title" class="w-full h-full object-cover ease-in-out duration-[900ms] group-hover:scale-[1.2]" />
+            <NuxtImg
+              :src="category.thumbnail" 
+              :alt="category.title" 
+              class="!w-[192px] h-[192px] object-cover ease-in-out duration-[900ms] group-hover:scale-[1.2]"
+            />
           </NuxtLink>
         </div>
         <div class="flex flex-col items-center mt-[20px]">

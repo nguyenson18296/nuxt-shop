@@ -55,7 +55,8 @@ export default {
         clickable: true,
       }" :modules="modules" :autoplay="{
         delay: 2500,
-      }" :breakpoints="breakpoints" class="mySwiper pb-[45px]"
+      }" :breakpoints="breakpoints" 
+        class="mySwiper pb-[45px] w-[390px]"
       >
         <slot />
       </swiper>

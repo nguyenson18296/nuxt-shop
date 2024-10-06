@@ -5,7 +5,7 @@ import { PhCaretRight } from "@phosphor-icons/vue";
 <template>
   <div class="w-full">
     <div class="container">
-      <div class="flex items-center gap-[30px]">
+      <div class="flex flex-wrap items-center gap-[30px]">
         <div class="relative">
           <a href="#">
             <img
