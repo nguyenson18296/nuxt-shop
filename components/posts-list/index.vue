@@ -31,10 +31,10 @@ watchEffect(() => {
 
 <template>
   <ClientOnly>
-    <div class="grid grid-cols-2 gap-y-4 gap-x-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
       <div class="grid-cols-6" v-for="post in posts" :key="post.id">
           <div class="card flex items-start gap-4">
-            <figure class="flex-[0_0_30%]">
+            <figure class="flex-[0_0_50%] md:flex-[0_0_40%]">
               <NuxtLink :to="`/blogs/${post.slug}`">
                 <NuxtImg :src="post.cover_photo" :alt="post.title" class="h-[200px] w-[300px] object-cover" />
               </NuxtLink>

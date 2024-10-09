@@ -30,10 +30,10 @@ const { categories } = storeToRefs(categoriesStore);
         spaceBetween: 30,
       },
       1024: {
-        slidesPerView: 5,
+        slidesPerView: 4,
         spaceBetween: 30,
       },
-      1280: {
+      1440: {
         slidesPerView: 6,
         spaceBetween: 30,
       },

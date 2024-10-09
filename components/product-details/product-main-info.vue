@@ -54,7 +54,7 @@ const addToCart = () => {
 </script>
 
 <template>
-  <div class="product-view p-4">
+  <div class="product-view p-0 md:p-4">
     <div class="flex flex-wrap lg:flex-nowrap items-start gap-8">
       <div class="product-view-images flex-[0_0_100%] lg:flex-[0_0_40%]">
         <ProductImages :thumbnail="thumbnail" :images="images" />
@@ -74,10 +74,10 @@ const addToCart = () => {
             <PhStar v-for="(v, i) of 5" :key="i" size="16" color="#ffbf34" :weight="rating >= i + 1 ? 'fill' : 'light'"
               fill="#ffbf34" />
           </div>
-          <div class="border-l-neutral-200 ml-5 pl-4 border-l border-solid">
+          <div class="border-l-neutral-200 ml-5 pl-4 border-l border-solid min-w-max">
             No reviews yet
           </div>
-          <div class="flex items-center gap-1 border-l-neutral-200 ml-5 pl-4 border-l border-solid">
+          <div class="flex items-center gap-1 border-l-neutral-200 ml-5 pl-4 border-l border-solid min-w-max">
             <PhPen size="16" color="#000" />
             Write a Review
           </div>

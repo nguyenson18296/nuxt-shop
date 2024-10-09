@@ -6,20 +6,20 @@ import { twMerge } from 'tailwind-merge';
 <template>
   <div class="w-full">
     <div class="container">
-      <div class="flex flex-wrap items-center gap-[30px]">
-        <div class="relative">
+      <div class="flex flex-wrap md:flex-nowrap justify-center items-center gap-[30px]">
+        <div class="relative flex-[0_0_100%] md:flex-[0_0_48%]">
           <a href="#">
             <img src="https://cdn11.bigcommerce.com/s-gl0yzafqud/product_images/uploaded_images/bottom-banner-01.jpg"
               alt="sub-banner" class="rounded-lg" />
           </a>
-          <div class="banner-content w-[44%] absolute w-[35%] right-[50px] top-8">
+          <div class="banner-content md:w-[44%] xl:w-[35%] absolute right-[50px] top-4 xl:top-8 ">
             <h4 class="font-normal text-base leading-5 capitalize text-[#111] mt-0 mb-[5px] mx-0">
               New Arrivals
             </h4>
             <h1
               :class="twMerge(
-                'min-w-max font-bold capitalize mt-0 mb-2.5 mb-[15px] mx-0',
-                'text-sm lg:text-[28px] lg:leading-[34px] text-[#111]'
+                'min-w-max font-bold capitalize mt-0 mb-2.5 mb-[5px] lg:mb-[15px] mx-0',
+                'text-sm md:text-base xl:text-[28px] lg:leading-[34px] text-[#111]'
               )"
             >
               Style Hat Cap
@@ -35,19 +35,20 @@ import { twMerge } from 'tailwind-merge';
             </div>
           </div>
         </div>
-        <div class="relative">
+        <div class="relative flex-[0_0_100%] md:flex-[0_0_48%]">
           <a href="#">
             <img src="https://cdn11.bigcommerce.com/s-gl0yzafqud/product_images/uploaded_images/bottom-banner-02.jpg"
               alt="sub-banner" class="rounded-lg" />
           </a>
-          <div class="banner-content w-[44%] absolute w-[35%] right-[50px] top-8">
+          <div class="banner-content w-[44%] absolute w-[35%] right-[50px] top-4 xl:top-8">
             <h4 class="font-normal text-base leading-5 capitalize text-white mt-0 mb-[5px] mx-0">
               New Arrivals
             </h4>
             <h1
               :class="twMerge(
-                'min-w-max font-bold capitalize mt-0 mb-2.5 mb-[15px] mx-0',
-                'text-sm lg:text-[28px] lg:leading-[34px] text-white'
+                'min-w-max font-bold capitalize',
+                'text-sm md:text-base xl:text-[28px] lg:leading-[34px] text-white',
+                'mt-0 mb-[5px] lg:mb-[15px] mx-0'
               )"
             >
               Daniel Wellington

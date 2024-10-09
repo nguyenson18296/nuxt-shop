@@ -59,10 +59,6 @@ export default {
         slidesPerView: 5,
         spaceBetween: 30,
       },
-      1280: {
-        slidesPerView: 6,
-        spaceBetween: 30,
-      },
     }"
       class="mySwiper">
         <swiper-slide>

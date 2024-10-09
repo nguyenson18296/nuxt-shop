@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { twMerge } from 'tailwind-merge';
 
 useServerSeoMeta({
   title: 'Vue Shop - E-commerce - Blog Posts | Your Source for the Latest News',
@@ -70,8 +71,12 @@ const headlinePost = computed(() => {
     <Breadcrumbs title="Blogs" />
     <div class="container pb-8">
       <SectionHeader title="Blogs" bg-text="#fff" />
-      <div class="mb-[30px] flex items-start gap-4">
-        <div class="news-trending flex-[0_0_25%] flex flex-col gap-4">
+      <div
+        :class="twMerge('mb-[30px]', 'flex flex-wrap md:flex-nowrap items-start gap-4')"
+      >
+        <div
+          :class="twMerge('news-trending order-2 md:order-1', 'flex-[0_0_100%] md:flex-[0_0_25%] flex flex-col gap-4')"
+        >
           <article v-for="(post, index) in trendingPosts" :key="post.id" class="p-2" :class="{
             'border-b border-solid border-b-neutral-200': index !== trendingPosts.length - 1
           }">
@@ -85,8 +90,10 @@ const headlinePost = computed(() => {
             </NuxtLink>
           </article>
         </div>
-        <div class="flex-[0_0_70%] flex items-start gap-4">
-          <div class="heading-post flex-[0_0_60%]">
+        <div
+          :class="twMerge('flex flex-col md:flex-row items-start gap-4', 'order-1 md:order-2', 'flex-[0_0_100%] md:flex-[0_0_70%]')"
+        >
+          <div class="heading-post flex-[0_0_100%] md:flex-[0_0_60%]">
             <article v-if="headlinePost" class="flex flex-col items">
               <NuxtLink :href="`/posts/${headlinePost.slug}`" class="flex flex-col">
                 <NuxtImg :src="headlinePost.cover_photo" :alt="headlinePost.title" width="100%" height="400" />
@@ -99,11 +106,15 @@ const headlinePost = computed(() => {
               </NuxtLink>
             </article>
           </div>
-          <div class="news-trending-right flex flex-col gap-8">
+          <div class="news-trending-right w-full flex flex-col gap-8">
             <article v-for="(post, index) in trendingRightPosts" :key="post.id" class="p-2"
               :class="{ 'border-b border-solid border-b-neutral-200': index !== trendingRightPosts.length - 1 }">
               <NuxtLink :href="`/posts/${post.slug}`" class="flex flex-col items-start gap-2">
-                <NuxtImg :src="post.cover_photo" :alt="post.title" width="258" height="172" />
+                <NuxtImg
+                  :src="post.cover_photo" 
+                  :alt="post.title" 
+                  class="w-full md:w-[258px] h-[172px] object-cover"
+                />
                 <div>
                   <h2
                     class="blog-header font-semibold text-left capitalize relative ml-0 mb-[15px] pb-2.5 max-w-[258px]">

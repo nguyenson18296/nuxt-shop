@@ -7,7 +7,7 @@ import { twMerge } from 'tailwind-merge';
     <div class="flex flex-wrap md:flex-nowrap">
       <div
         :class="twMerge(
-          'w-full md:w-[64%] rounded-lg',
+          'w-full md:w-[80%] xl:w-[64%] rounded-lg',
           'px-0 mr-0 mt-[15px] mb-[30px] md:px-[30px] py-0'
         )"
       >
