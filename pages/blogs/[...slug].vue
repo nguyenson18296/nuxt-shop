@@ -57,7 +57,7 @@ useServerSeoMeta({
     </div>
     <div class="container my-4">
       <div class="flex items-start justify-center">
-        <div class="flex-[0_0_50%]">
+        <div class="flex-[0_0_100%] md:flex-[0_0_50%]">
           <div class="card">
             <h2 class="blog-header text-3xl font-semibold text-left border-b-neutral-200 capitalize relative ml-0 mb-[15px] pb-2.5 border-b border-solid">
               {{ postDetail.title }}

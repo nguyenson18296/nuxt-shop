@@ -53,7 +53,7 @@ getMe();
         </div>
         <SearchBox />
         <div
-          :class="twMerge('bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white flex items-center gap-2', 'order-3 hidden lg:block')">
+          :class="twMerge('bg-[#f27002] rounded-lg px-2.5 py-[12px] cursor-pointer contact-number w-[16%] text-white items-center gap-2', 'order-3 hidden xl:flex')">
           <PhPhone />
           <div>
             +(00)1234 567891
@@ -125,7 +125,7 @@ getMe();
       </div>
     </div>
     <div
-      class="header-bottom bg-[#f27002] text-center w-full px-0 py-2">
+      class="header-bottom opacity-0 md:opacity-100 bg-[#f27002] text-center w-full px-0 py-2">
       <div class="container">
         <div class="flex items-center">
           <ShopByCategoryDropdown />
@@ -195,7 +195,7 @@ getMe();
   </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 header .header-center.fixed {
   border: medium none;
   left: 0;
@@ -226,5 +226,14 @@ header .header-center.fixed {
     100% {
         top: 0
     }
+}
+
+.header-center {
+  @media (min-width: 320px) and (max-width: 639px) {
+  .container {
+    width: calc(100vw - 20px);
+    margin: 0;
+  }
+}
 }
 </style>

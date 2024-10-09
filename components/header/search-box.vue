@@ -61,7 +61,6 @@ onUnmounted(() => {
   cancel();
 })
 
-console.log('searchTerm', searchTerm.value);
 </script>
 
 <template>
